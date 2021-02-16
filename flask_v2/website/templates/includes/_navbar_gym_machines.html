@@ -1,0 +1,35 @@
+<nav class="navbar navbar-expand-md navbar-dark bg-dark">
+    <a class="navbar-brand" href="#">GYM MACHINES</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+  
+    <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item {{ selector_active }}">
+          <a class="nav-link" href="/">Muscle Selector</a>
+        </li>
+        <li class="nav-item {{ machines_active }}">
+          <a class="nav-link" href="/machines_v2">The Machines</a>
+        </li>
+        <li class="nav-item {{ muscles_active }}">
+          <a class="nav-link" href="/muscles_v2">Muscle Groups</a>
+        </li>
+        {% if THIS_MACHINE == "my.laptop" %}
+          <li class="nav-item {{ exercises_active }}">
+            <a class="nav-link" href="/exercises_v2">Exercises</a>
+          </li>
+          <li class="nav-item {{ manage_machines_active }}">
+            <a class="nav-link" href="/manage_machines">Manage Machines</a>
+          </li>
+          <li class="nav-item {{ manage_muscles_active }}">
+            <a class="nav-link" href="/manage_muscles">Manage Muscles</a>
+          </li>
+          <li class="nav-item {{ manage_exercises_active }}">
+            <a class="nav-link" href="/manage_exercises">Manage Exercises</a>
+          </li>
+        {% endif %}
+      </ul>
+    </div>
+  </nav>
+

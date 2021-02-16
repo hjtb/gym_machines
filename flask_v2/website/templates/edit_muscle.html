@@ -1,0 +1,46 @@
+{% set title = 'Edit Muscle' %}
+{% extends "base_layout.html" %}
+{% block body %}
+    {% block content %}
+
+
+        <div class="jumbotron m-0">
+            <h1 class="display-4">EDIT MUSCLE</h1>
+            <p class="lead">
+                     
+            </p>
+        </div>
+
+        <div class="container">
+            
+            <div class="card" style="width: 50rem;">
+                <div class="card-header">
+                  EDIT MUSCLE
+                </div>
+                <div class="card-body">
+                    <form action="" method="POST">
+                        <div class="form-group">
+                          <label for="name">Muscle Name</label>
+                          <input type="text" class="form-control" id="name" name="name" aria-describedby="namehelp" value='{{ form_package['name'] }}'>
+                          <small id="namehelp" class="form-text text-muted">Edit the muscle name here</small>
+                        </div>
+                        <div class="form-group">
+                            <label for="description">Muscle Description</label>
+                            <input type="text" class="form-control" id="description" name="description" aria-describedby="descriptionhelp" value='{{ form_package['description'] }}'>
+                            <small id="descriptionhelp" class="form-text text-muted">Edit the muscle description here</small>
+                        </div>
+                        <div class="form-group">
+                            <label for="image">Muscle Image</label>
+                            <input type="text" class="form-control" id="image" name="image" aria-describedby="imagehelp" value='{{ form_package['image'] }}'>
+                            <small id="imagehelp" class="form-text text-muted">Edit muscle image here</small>
+                        </div>
+                        <input type="hidden" name="id" value="{{ form_package['id'] }}">
+                        <button type="submit" class="btn btn-outline-dark">Update</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    {% endblock content %}
+
+
+{% endblock body %}

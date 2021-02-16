@@ -1,0 +1,104 @@
+{% set title = 'Gym Machines' %}
+{% extends "base_layout.html" %}
+{% set selector_active = 'active' %}
+{% block body %}
+{% block content %}
+
+
+<div class="jumbotron m-0">
+    <h1 class="display-4">GYM MACHINE SELECTOR</h1>
+    <p class="lead">
+        Enter a muscle that you wish to train and our selector will return the appropriate machines
+    </p>
+</div>
+
+
+<div class="container">
+    <div class="card">
+        <img src="/static/images/muscles_abs.png" class="card-img-top">
+    </div>
+    <form method="post" class="form-inline">
+        <label class="my-1 mr-2" for="inlineFormCustomSelectPref">Choose a Muscle</label>
+        <select name="muscle" id="muscle">
+            {% for muscle in muscle_dictionary %}
+            {% set selected = "selected" if muscle == muscle_from_form %}
+            <option value="{{ muscle }}" {{ selected }}>{{ muscle|title }}</option>
+            {% endfor %}
+        </select>
+        <button type="submit" class="btn btn-outline-dark m-2">Submit</button>
+    </form>
+    <br>
+
+    {% if muscle_from_form %}
+        <div class="card mx-auto w-50">
+            <div class="card-header bg-secondary text-light">
+                <h5 class="card-title">{{ muscle_from_form|title }}</h5>
+            </div>
+
+            <div class="row no-gutters">
+                <div class="col-lg-6">
+                    <img src="static/images/{{ muscle_dictionary[muscle_from_form]['image'] }}" class="card-img">
+                </div>
+                <div class="col-lg-6">
+                    <div class="card-body">
+                        <p class="card-text">{{ muscle_dictionary[muscle_from_form]['description'] }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br>
+
+        <div class="row">
+            <h1 class="text-centre display-4">You can use these machines to train {{ muscle_from_form }}</h1>
+
+            <div class="card-deck">
+                {% for gym_machine in specific_machines %}
+                    <div class="col-lg-6 mb-4">
+                        <div class="card m-0 h-100">
+                            <div class="card-header bg-secondary text-light">
+                                <h5 class="card-title">{{ gym_machine['name']|title }}</h5>
+                            </div>
+                            <div class="card-body no-gutters d-flex flex-wrap">
+                                <div class="col-md-6">
+                                    <img src="static/images/{{ gym_machine.get('image_file_name')[0] }}" class="card-img-top h-100">
+                                </div>
+                                <div class="col-md-6">
+                                    <h5 class="card-title">You can use {{ gym_machine.get('name') }} to train {{ muscle_from_form }} by doing:</h5>
+                                    <ul class="list-group-flush">
+                                        {% for exercise, muscles in gym_machine["exercises"].items() %}
+                                            {% if muscle_from_form in muscles %}
+                                            <li class="list-group-item p-0 m-0">
+                                                {{ exercise|replace("_", " ")|title }}
+                                            </li>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </ul>
+                                    <br>
+                                </div>
+                            </div>    
+                            <div class="card-footer">
+                                <button type="button" class="btn btn-outline-dark" data-container="body" data-placement="auto" data-toggle="popover"
+                                    data-html="true" data-trigger = "hover"
+                                    title="<img src='static/images/{{ gym_machine.get('image_file_name')[1] }}'  class='img-fluid rounded'>">
+                                    See the machine in use
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+
+    {% else %}
+        <h2 class="display-4 text-center">PICK A MUSCLE AND WE'LL SHOW YOU THE MACHINES YOU CAN USE TO TRAIN THAT MUSCLE
+        </h2>
+
+        <img src="static/images/muscle_selector.png" class="card-img w-50 rounded mx-auto d-block">
+
+    {% endif %}
+</div>
+
+{% endblock content %}
+
+
+{% endblock body %}

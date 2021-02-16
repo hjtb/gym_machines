@@ -1,0 +1,61 @@
+{% set title = 'EXERCISES' %}
+{% set exercises_active = 'active' %}
+{% extends "base_layout.html" %}
+{% block navbar %}
+    {% include '/includes/_navbar_gym_machines.html' %}
+{% endblock navbar %}
+{% block content %}
+
+<div class="jumbotron m-0">
+    <h1 class="display-4">EXERCISES</h1>
+    <p class="lead">
+        The main function of the muscular system is movement.
+        Muscles are the only tissue in the body that has the ability to contract and therefore move the other parts of
+        the body.
+        Related to the function of movement is the muscular system's second function:
+        the maintenance of posture and body position
+    </p>
+</div>
+
+<div class="card-group w-100">
+    <div class="card">
+        <img src="/static/images/exercise_title1.png" class="card-img-top h-100">
+    </div>
+    <div class="card">
+        <img src="/static/images/exercise_title2.png" class="card-img-top h-100">
+    </div>
+</div>
+
+<div class="container">
+
+    <div class="jumbotron m-0">
+        <h1 class="display-4">THESE ARE SOME OF THE EXERCISES WE CAN PERFORM TO TARGET DIFFERENT MUSCLE GROUPS</h1>
+    </div>
+
+
+    <div class="row">
+        {% for exercise in exercise_dictionary %}
+        <div class="col-lg-6">
+            <div class="card my-4">
+
+                <div class="card-header bg-secondary text-light">
+
+                    <h5 class="card-title">{{ exercise|replace("_"," ")|title }}</h5>
+                </div>
+                <div class="row no-gutters">
+                    <div class="col-md-6">
+                        <img src="static/images/glutes.png" class="card-img">
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card-body">
+                            <p class="card-text">{{ exercise_dictionary[exercise]["description"] }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+</div>
+{% endblock content %}

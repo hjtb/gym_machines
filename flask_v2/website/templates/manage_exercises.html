@@ -1,0 +1,55 @@
+{% set title = 'Exercises' %}
+{% extends "base_layout.html" %}
+{% set manage_exercises_active = 'active' %}
+{% block body %}
+    {% block content %}
+
+
+        <div class="jumbotron m-0">
+            <h1 class="display-4">MANAGE EXERCISES</h1>
+            <p class="lead">
+                Use the table to manage the EXERCISES         
+            </p>
+        </div>
+
+        <div class="container">
+            <div class="card" style="width: 50rem;">
+                <div class="card-header">
+                  EXERCISES
+                </div>
+                <a href="add_exercise">Add Exercise</a>
+
+                <table class="table">
+                    <thead class="thead-light">
+                        <tr>
+                            <th scope="col">ID</th> 
+                            <th scope="col">Exercise</th>
+                            <th scope="col">Description</th>
+                            <th scope="col">Image</th>
+                            <th scope="col">Date Created</th>
+                            <th scope="col">Edit Exercise</th>
+                            <th scope="col">Delete Exercise</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for exercise in exercises %}
+                            <tr>
+                                <th scope="row">{{ exercise.id }}</th>
+                                <td>{{ exercise.name }}</td>
+                                <td>{{ exercise.description }}</td>
+                                <td>{{ exercise.image }}</td>
+                                <td>{{ exercise.created_date }}</td>
+                                <td><a class="btn btn-outline-dark" href="/edit_exercise?exercise_id={{ exercise.id }}" role="button">Edit</a></td>
+                                <td><a class="btn btn-danger" href="/delete_exercise?exercise_id={{ exercise.id }}" role="button" 
+                                    data-container="body" data-placement="auto" data-toggle="popover" data-html="true" data-trigger = "hover"
+                                    title="If you click this button there's no going back">Delete</a></td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    {% endblock content %}
+
+
+{% endblock body %}

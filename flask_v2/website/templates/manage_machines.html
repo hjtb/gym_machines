@@ -1,0 +1,49 @@
+{% set title = 'Gym Machines' %}
+{% extends "base_layout.html" %}
+{% set manage_machines_active = 'active' %}
+{% block body %}
+    {% block content %}
+
+
+        <div class="jumbotron m-0">
+            <h1 class="display-4">MANAGE THE MACHINES IN THIS GYM</h1>
+            <p class="lead">
+                Use the form to manage the machines in the gym      
+            </p>
+        </div>
+
+        <div class="container">
+            <div class="card" style="width: 50rem;">
+                <div class="card-header">
+                  MACHINES
+                </div>
+                <table class="table">
+                    <thead class="thead-light">
+                        <tr>
+                            <th scope="col">ID</th>
+                            <th scope="col">Machine</th>
+                            <th scope="col">Description</th>
+                            <th scope="col">Date Created</th>
+                            <th scope="col">Edit Machine</th>
+                            <th scope="col">Delete Machine</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for machine in machines %}
+                            <tr>
+                                <th scope="row">{{ machine.id }}</th>
+                                <td>{{ machine.name }}</td>
+                                <td>{{ machine.description }}</td>
+                                <td>{{ machine.created_date }}</td>
+                                <td><a class="btn btn-outline-dark" href="#" role="button">Edit</a></td>
+                                <td><a class="btn btn-danger" href="#" role="button">Delete</a></td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    {% endblock content %}
+
+
+{% endblock body %}

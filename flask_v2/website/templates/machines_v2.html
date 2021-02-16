@@ -1,0 +1,64 @@
+{% set title = 'OUR GYM MACHINES' %}
+{% set machines_active = 'active' %}
+{% extends "base_layout.html" %}
+{% block navbar %}
+{% include '/includes/_navbar_gym_machines.html' %}
+{% endblock navbar %}
+{% block content %}
+
+<div class="jumbotron m-0">
+    <h1 class="display-4">OUR GYM MACHINES</h1>
+    <p class="lead">
+        All our equipment has been specially selected to help you achieve your fitness goals.
+        Whether you are looking to bulk up and add muscle,
+        tone those abs or increase performance in a particular sport or activity,
+        we’ve got the perfect range of equipment to help you get there.
+    </p>
+</div>
+
+<div class="container">
+
+    <div class="card w-100">
+        <img src="static/images/title_machines.png" class="card-img-top w-100 align-self-center">
+    </div>
+
+    <div class="jumbotron mb-4">
+        <h1 class="display-4">THESE ARE THE MACHINES AVAILABLE IN OUR GYM</h1>
+    </div>
+
+    <div class="row gap">
+        {% for gym_machine in gym_machines %}
+            <div class="col-lg-6 mb-4">
+                <div class="card m-0 h-100">
+                    <div class="card-header bg-secondary text-light">
+                        <h5 class="card-title">{{ gym_machine['name']|title }}</h5>
+                    </div>
+                    <div class="card-body no-gutters d-flex flex-wrap">
+                        <div class="col-md-6">
+                            <img src="static/images/{{ gym_machine.get('image_file_name')[0] }}" class="card-img-top h-100">
+                        </div>
+                        <div class="col-md-6">
+                            <h5 class="card-title">Exercises</h5>
+                            <ul class="list-group-flush">
+                                {% for exercise, muscles in gym_machine["exercises"].items() %}
+                                <li class="list-group-item p-0 m-0">
+                                    {{ exercise|replace("_", " ")|title }}
+                                </li>
+                                {% endfor %}
+                            </ul>
+                            <br>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <button type="button" class="btn btn-outline-dark" data-placement="top" data-toggle="popover"
+                            data-html="true" data-trigger = "hover"
+                            title="<img src='static/images/{{ gym_machine.get('image_file_name')[1] }}'  class='img-fluid rounded'>">
+                            See the machine in use
+                        </button>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock content %}
