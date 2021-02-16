@@ -31,25 +31,6 @@ def gym_machines_site_sql():
     # Get the url arguments if there are any
     url_arguments =  request.args.to_dict(flat=False)
 
-    # use the orm to construct a query object (and extract the record with first())
-    answer_1 = db.session.query(User.user_name).first()
-    print(f"answer_1 is {answer_1.user_name}")
-
-    # Use sqlalchemy to directly execute some sql 
-    sql = f"SELECT * FROM users"
-    answer_2 = db.session.execute(sql).first()
-    print(f"answer_2 is {answer_2.user_name}")
-
-    # Create a new user using the orm, add it to the session and then commit to the database 
-    user = User(user_name=f"PBS-{secrets.token_urlsafe(20)}", user_age=57)
-    # user = User(user_name=f"PBS", user_age=57)
-    db.session.add(user)
-    try:
-        commit_result = db.session.commit()
-    except Exception as err:
-        print(f"The commit failed. The error was: {err}")
-
-
     # if there are any url arguments, print them to the console here
     if len(url_arguments) > 0:
         print(f"\nThere were some url arguments and they were:\n{url_arguments}\n")
@@ -79,10 +60,6 @@ def gym_machines_site_sql():
                     if gym_machine not in specific_machines:
                         specific_machines.append(gym_machine)
      
-    sql = f"SELECT * FROM users"
-    result = db.session.execute(sql).first()
-
-    results = db.session.execute(sql)
 
     return render_template (
         "gym_machines_site_sql.html",
