@@ -34,6 +34,11 @@ class Config:
         database = "my_db_schema"
         database_url = "127.0.0.1"
 
+    if FLASK_ENV in ["production"]:
+        db_username = "my_db_user"
+        database = "hjtb$my_db_schema"
+        database_url = "hjtb.mysql.eu.pythonanywhere-services.com"
+
     # Create the db connection string
     SQLALCHEMY_DATABASE_URI = (
         "mysql+mysqlconnector://"
