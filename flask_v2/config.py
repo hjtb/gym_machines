@@ -35,7 +35,7 @@ class Config:
         database_url = "127.0.0.1"
 
     if FLASK_ENV in ["production"]:
-        db_username = "my_db_user"
+        db_username = "hjtb"
         database = "hjtb$my_db_schema"
         database_url = "hjtb.mysql.eu.pythonanywhere-services.com"
 
