@@ -28,7 +28,7 @@ class Muscle(db.Model):
     description = db.Column(db.String(500), nullable=False)
     image = db.Column(db.String(100), nullable=False)
     created_date = db.Column(db.DateTime(timezone=True), server_default=func.now())
-    exercises = db.relationship("Exercise", secondary=exercises_muscles, backref="muscles")
+    exercises = db.relationship("Exercise", secondary=exercises_muscles, backref="muscles_backref")
 
     
     def __repr__(self):
@@ -52,7 +52,7 @@ class Exercise(db.Model):
     name = db.Column(db.String(100), unique=True, nullable=False)
     description = db.Column(db.String(500), nullable=False)
     created_date = db.Column(db.DateTime(timezone=True), server_default=func.now())
-    muscles = db.relationship("Muscle", secondary=exercises_muscles, backref="exercises")
+    muscles = db.relationship("Muscle", secondary=exercises_muscles, backref="exercises_backref")
 
     def __repr__(self):
         return dict(id=self.id, name=self.name, description=self.description) 

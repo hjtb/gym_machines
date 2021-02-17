@@ -500,6 +500,13 @@ def add_exercise():
             db.session.add(exercise)
             db.session.commit()
             flash(f"Just added {form_package['name'][0]}", category='success')
+            sql = f'INSERT INTO exercises_muscles (exercise_id, muscle_id) VALUES '
+            for muscle_id in form_package['muscle_ids']:
+                muscle_id = int(muscle_id)
+                sql = f'{sql} ({exercise.id}, {muscle_id}),'
+            sql = f'{sql[0:-1]};'
+            db.session.execute(sql)
+            db.session.commit()
 
         except IntegrityError as err:
             flash(f"{form_package['name'][0]} already exists.", category='warning')
@@ -515,7 +522,6 @@ def add_exercise():
     return render_template (
         "add_exercise.html",
         muscles=muscles,
-        muscle_dictionary=muscle_dictionary,
         form_package=form_package,
         url_arguments=url_arguments,
         THIS_MACHINE=app.config["THIS_MACHINE"]
