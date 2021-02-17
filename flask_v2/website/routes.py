@@ -108,6 +108,7 @@ def muscles_v2():
         url_arguments=url_arguments,
         muscle_dictionary=muscle_dictionary,
         gym_machines=gym_machines,
+        THIS_MACHINE=app.config["THIS_MACHINE"]
     )
 
 # Define our route (the last part of the url for our website application)
@@ -147,6 +148,7 @@ def exercises_v2():
         muscle_dictionary=muscle_dictionary,
         exercise_dictionary=exercise_dictionary,
         gym_machines=gym_machines,
+        THIS_MACHINE=app.config["THIS_MACHINE"]
     )
 
 
@@ -186,6 +188,7 @@ def machines_v2():
         url_arguments=url_arguments,
         muscle_dictionary=muscle_dictionary,
         gym_machines=gym_machines,
+        THIS_MACHINE=app.config["THIS_MACHINE"]
     )
 
 @app.route("/manage_machines", methods=["GET", "POST"])
@@ -213,7 +216,8 @@ def manage_machines():
         "manage_machines.html",
         machines=machines,
         form_package=form_package,
-        url_arguments=url_arguments
+        url_arguments=url_arguments,
+        THIS_MACHINE=app.config["THIS_MACHINE"]
         )
 
 @app.route("/manage_muscles", methods=["GET", "POST"])
@@ -241,7 +245,8 @@ def manage_muscles():
         "manage_muscles.html",
         muscles=muscles,
         form_package=form_package,
-        url_arguments=url_arguments
+        url_arguments=url_arguments,
+        THIS_MACHINE=app.config["THIS_MACHINE"]
         )
 
 @app.route("/add_muscle", methods=["GET", "POST"])
@@ -290,7 +295,8 @@ def add_muscle():
     return render_template (
         "add_muscle.html",
         form_package=form_package,
-        url_arguments=url_arguments
+        url_arguments=url_arguments,
+        THIS_MACHINE=app.config["THIS_MACHINE"]
         )
 
 @app.route("/edit_muscle", methods=["GET", "POST"])
@@ -375,7 +381,8 @@ def edit_muscle():
     return render_template (
         "edit_muscle.html",
         form_package=form_package,
-        url_arguments=url_arguments
+        url_arguments=url_arguments,
+        THIS_MACHINE=app.config["THIS_MACHINE"]
         )
 
 
@@ -455,7 +462,8 @@ def manage_exercises():
         exercises=exercises,
         muscles=muscles,
         form_package=form_package,
-        url_arguments=url_arguments
+        url_arguments=url_arguments,
+        THIS_MACHINE=app.config["THIS_MACHINE"]
         )
 
 @app.route("/add_exercise", methods=["GET", "POST"])
@@ -509,7 +517,8 @@ def add_exercise():
         muscles=muscles,
         muscle_dictionary=muscle_dictionary,
         form_package=form_package,
-        url_arguments=url_arguments
+        url_arguments=url_arguments,
+        THIS_MACHINE=app.config["THIS_MACHINE"]
         )
 
 @app.route("/edit_exercise", methods=["GET", "POST"])
@@ -591,7 +600,8 @@ def edit_exercise():
     return render_template (
         "edit_exercise.html",
         form_package=form_package,
-        url_arguments=url_arguments
+        url_arguments=url_arguments,
+        THIS_MACHINE=app.config["THIS_MACHINE"]
         )
 
 @app.route("/delete_exercise", methods=["GET", "POST"])

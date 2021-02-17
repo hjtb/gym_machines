@@ -151,18 +151,17 @@ Extend knees and hips until legs are straight.
 Return and repeat."""
 
 exercise_dictionary["lunges"]["description"] = f"""
-Squat down by bending hips back while allowing knees to bend forward, 
-keeping back straight and knees pointed same direction as feet. 
-Descend until thighs are just past parallel to floor. 
-Extend knees and hips until legs are straight. 
-Return and repeat."""
+Step forward with one leg and squat down through your hips. 
+Keep your back straight and be careful to maintain your balance. 
+Inhale as you lower yourself.
+Continue lowering your body until your alternate knee is nearly touching the floor.
+Return to the start position by pushing through your heel, exhaling as you do so."""
 
 exercise_dictionary["deadlifts"]["description"] = f"""
-Squat down by bending hips back while allowing knees to bend forward, 
-keeping back straight and knees pointed same direction as feet. 
-Descend until thighs are just past parallel to floor. 
-Extend knees and hips until legs are straight. 
-Return and repeat."""
+Squat down, keeping your back straight and grip the bar with an overhand grip at shoulder width.
+Keep your arms fully extended and stand up with the barbell.
+As you lift the barbell, your hips and shoulders should rise together and your back should be straight.
+Lower the barbell back to the floor in the same squatting motion you used to lift it."""
 
 exercise_dictionary["front_squats"]["description"] = f"""
 Squat down by bending hips back while allowing knees to bend forward, 

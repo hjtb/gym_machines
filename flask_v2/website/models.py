@@ -16,6 +16,11 @@ from flask import current_app as app
 from website import db
 from sqlalchemy.sql import func 
 
+exercises_muscles = db.Table('exercises_muscles',
+    db.Column('exercise_id', db.Integer, db.ForeignKey('exercises.id'), primary_key=True),
+    db.Column('muscle_id', db.Integer, db.ForeignKey('muscles.id'), primary_key=True)
+)
+
 class Muscle(db.Model):
     __tablename__ = 'muscles'
     id = db.Column(db.Integer, primary_key=True)
@@ -23,6 +28,8 @@ class Muscle(db.Model):
     description = db.Column(db.String(500), nullable=False)
     image = db.Column(db.String(100), nullable=False)
     created_date = db.Column(db.DateTime(timezone=True), server_default=func.now())
+    exercises = db.relationship("Exercise", secondary=exercises_muscles, backref="muscles")
+
     
     def __repr__(self):
         return dict(id=self.id, name=self.name, description=self.description, image=self.image ) 
@@ -45,6 +52,7 @@ class Exercise(db.Model):
     name = db.Column(db.String(100), unique=True, nullable=False)
     description = db.Column(db.String(500), nullable=False)
     created_date = db.Column(db.DateTime(timezone=True), server_default=func.now())
+    muscles = db.relationship("Muscle", secondary=exercises_muscles, backref="exercises")
 
     def __repr__(self):
         return dict(id=self.id, name=self.name, description=self.description) 
@@ -59,6 +67,7 @@ class User(db.Model):
 
     def __repr__(self):
         return dict(id=self.id, user_name=self.user_name, user_age=self.user_age) 
+
 
 
 
