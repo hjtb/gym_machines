@@ -164,46 +164,52 @@ As you lift the barbell, your hips and shoulders should rise together and your b
 Lower the barbell back to the floor in the same squatting motion you used to lift it."""
 
 exercise_dictionary["front_squats"]["description"] = f"""
-Squat down by bending hips back while allowing knees to bend forward, 
-keeping back straight and knees pointed same direction as feet. 
-Descend until thighs are just past parallel to floor. 
-Extend knees and hips until legs are straight. 
-Return and repeat."""
+Keeping your elbows high, place your arms up and under the bar. 
+The bar should be resting on the front of your shoulders. 
+Core is tight. Back is flat.
+Maintaining control, lift the bar up. Bend your knees forward and allow your hips to bend back as if sitting down. 
+Pause when thighs are parallel with the floor.
+Return to the starting position and repeat."""
 
 exercise_dictionary["calf_raises"]["description"] = f"""
-Squat down by bending hips back while allowing knees to bend forward, 
-keeping back straight and knees pointed same direction as feet. 
-Descend until thighs are just past parallel to floor. 
-Extend knees and hips until legs are straight. 
-Return and repeat."""
+With a tight core and flat back, raise yourself up with your feet only. 
+Pause at the top of the raise.
+Slowly lower yourself down but do not touch the ground. 
+Raise yourself back up."""
 
 exercise_dictionary["shrugs"]["description"] = f"""
-Squat down by bending hips back while allowing knees to bend forward, 
-keeping back straight and knees pointed same direction as feet. 
-Descend until thighs are just past parallel to floor. 
-Extend knees and hips until legs are straight. 
-Return and repeat."""
+Using an overhand grip at a little more than shoulder width, hold a weight in front of you.
+Your arms should be fully extended towards the floor, 
+palms facing in towards your thighs. This is the start position.
+Exhale and raise or shrug your shoulders up in a slow controlled movement. 
+Do not use your biceps to assist in lifting the weight."""
 
 exercise_dictionary["pull_ups"]["description"] = f"""
-Squat down by bending hips back while allowing knees to bend forward, 
-keeping back straight and knees pointed same direction as feet. 
-Descend until thighs are just past parallel to floor. 
-Extend knees and hips until legs are straight. 
-Return and repeat."""
+Reach up and hold onto the bar/rings with an overhand grip. 
+Keep your arms straight and hang from the bar so that your arms are taking all of your weight.
+Keeping your body straight and not swinging your weight, 
+pull your body up towards the bar by pulling your elbows down towards your torso at an angle.
+Continue lifting until your chest is nearly touching the bar. 
+You should feel a “squeeze” at the base of your lats as they contract.
+Once your lats have completely contracted at the top of the movement, 
+slowly lower your body to the starting position."""
 
 exercise_dictionary["chin_ups"]["description"] = f"""
-Squat down by bending hips back while allowing knees to bend forward, 
-keeping back straight and knees pointed same direction as feet. 
-Descend until thighs are just past parallel to floor. 
-Extend knees and hips until legs are straight. 
-Return and repeat."""
+Step up to the bar/rings and grasp with your palms facing you and arms close together.
+Your arms should be fully extended.
+Pull your body up until your elbows are completely bent and close to your body, 
+reaching your chin to the bar.
+Lower your body until your arms and legs are fully extended in the starting position."""
 
 exercise_dictionary["leg_raises"]["description"] = f"""
-Squat down by bending hips back while allowing knees to bend forward, 
-keeping back straight and knees pointed same direction as feet. 
-Descend until thighs are just past parallel to floor. 
-Extend knees and hips until legs are straight. 
-Return and repeat."""
+Grip rings/chin up/ pull up bar with a firm overhand grip.
+Hang from the bar with your legs straight.
+Raise your legs by flexing your hips forward and bending your knees up towards your chest.
+Continue to raise your knees towards your chest by flexing your waist forward. 
+Don’t swing your body to use momentum. 
+Use your abdominals to pull your legs up.
+Return to the starting position, lowering your legs slowly until they are straight.
+Repeat."""
 
 exercise_dictionary["front_levers"]["description"] = f"""
 Squat down by bending hips back while allowing knees to bend forward, 
