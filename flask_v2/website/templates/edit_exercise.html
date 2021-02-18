@@ -29,10 +29,10 @@
                             <input type="text" class="form-control" id="description" name="description" aria-describedby="descriptionhelp" value='{{ form_package['description'] }}'>
                             <small id="descriptionhelp" class="form-text text-muted">Edit the exercise description here</small>
                         </div>
-                        {% for muscle in muscle_dictionary %}    
+                        {% for muscle in muscles %}    
                             <div class="form-check form-check-inline">
-                                <input class="form-check-input" name="muscle_name_{{ muscle }}" type="checkbox" id="muscle_name_{{ muscle }}" value="{{ muscle }}_from_value" checked>
-                                <label class="form-check-label" for="muscle_name_{{ muscle }}">{{ muscle|title }}</label>
+                                <input class="form-check-input" name="muscle_name_{{ muscle.name }}" type="checkbox" id="muscle_name_{{ muscle.name }}" value="{{ muscle.name }}_from_value" checked>
+                                <label class="form-check-label" for="muscle_name_{{ muscle.name }}">{{ muscle.name|title }}</label>
                             </div>
                         {% endfor %}
                         <input type="hidden" name="id" value="{{ form_package['id'] }}">

@@ -421,6 +421,17 @@ def delete_muscle():
 
     print(f"You are in delete muscle, deleting muscle with ID = {muscle_id}")
 
+    sql = f"DELETE FROM exercises_muscles WHERE muscle_id = {muscle_id}"
+
+    try:
+        exercises = db.session.execute(sql)
+        db.session.commit()
+        flash(f"Deleted exercise-muscle relationships with muscle-id = {muscle_id}", category='success')
+
+    except:
+        flash(f"could not delete exercise-muscle relationship with id = {muscle_id}", category='warning')
+        db.session.rollback
+
     sql = f"DELETE FROM muscles WHERE id = {muscle_id}"
 
     try:
@@ -442,16 +453,18 @@ def manage_exercises():
     url_arguments =  request.args.to_dict(flat=False)
 
     # Use sqlalchemy to query the tables 
-    #sql = f"SELECT * FROM exercises"
+    sql = f"SELECT * FROM exercises"
+    exercises = db.session.execute(sql)
+
     sql = f"""
-        select exercises.id, exercises.description, exercises.name as exercise_name, exercises_muscles.muscle_id, muscles.name as muscle_name
+        select exercises.id, exercises.name as exercise_name, exercises_muscles.muscle_id, muscles.name as muscle_name
         from exercises 
         left join exercises_muscles
         on exercises.id = exercises_muscles.exercise_id
         left join muscles
         on muscles.id = exercises_muscles.muscle_id;
     """
-    exercises = db.session.execute(sql)
+    exercises_data = db.session.execute(sql)
 
     sql = f"SELECT * FROM muscles"
     muscles = db.session.execute(sql)
@@ -468,6 +481,7 @@ def manage_exercises():
     return render_template (
         "manage_exercises.html",
         exercises=exercises,
+        exercises_data=exercises_data,
         muscles=muscles,
         form_package=form_package,
         url_arguments=url_arguments,
@@ -564,6 +578,14 @@ def edit_exercise():
         flash(f"The url has become corrupted", category='warning')
         return redirect("/")
 
+    # query the db to get the muscles table
+    sql = f"SELECT * FROM muscles"
+    muscles = db.session.execute(sql)
+
+    # query the db to get the exercises_muscles table
+    sql = f"SELECT * FROM exercises_muscles"
+    exercise_muscle = db.session.execute(sql)
+
     # query the exercises db to get info on selected exercise
     sql = f"SELECT * FROM exercises WHERE id = {exercise_id}"
 
@@ -592,6 +614,7 @@ def edit_exercise():
         description = form_package['description'][0]
         name = form_package['name'][0]
 
+
         sql = f"""
         UPDATE exercises 
         SET name = '{name}',
@@ -617,6 +640,7 @@ def edit_exercise():
 
     return render_template (
         "edit_exercise.html",
+        muscles=muscles,
         form_package=form_package,
         url_arguments=url_arguments,
         THIS_MACHINE=app.config["THIS_MACHINE"]
