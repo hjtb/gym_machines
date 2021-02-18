@@ -52,6 +52,7 @@ class Exercise(db.Model):
     name = db.Column(db.String(100), unique=True, nullable=False)
     description = db.Column(db.String(500), nullable=False)
     created_date = db.Column(db.DateTime(timezone=True), server_default=func.now())
+    #muscles_worked = db.Column(db.string(100), nullable=False)
     muscles = db.relationship("Muscle", secondary=exercises_muscles, backref="exercises_backref")
 
     def __repr__(self):
