@@ -442,14 +442,19 @@ def manage_exercises():
     url_arguments =  request.args.to_dict(flat=False)
 
     # Use sqlalchemy to query the tables 
-    sql = f"SELECT * FROM exercises"
+    #sql = f"SELECT * FROM exercises"
+    sql = f"""
+        select exercises.id, exercises.description, exercises.name as exercise_name, exercises_muscles.muscle_id, muscles.name as muscle_name
+        from exercises 
+        left join exercises_muscles
+        on exercises.id = exercises_muscles.exercise_id
+        left join muscles
+        on muscles.id = exercises_muscles.muscle_id;
+    """
     exercises = db.session.execute(sql)
 
     sql = f"SELECT * FROM muscles"
     muscles = db.session.execute(sql)
-    
-    sql = f"SELECT * FROM exercises_muscles"
-    muscles_of_exercises = db.session.execute(sql)
 
     # if there are any url arguments, print them to the console here
     if len(url_arguments) > 0:
@@ -462,7 +467,6 @@ def manage_exercises():
 
     return render_template (
         "manage_exercises.html",
-        muscles_of_exercises=muscles_of_exercises,
         exercises=exercises,
         muscles=muscles,
         form_package=form_package,

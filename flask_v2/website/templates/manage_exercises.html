@@ -35,9 +35,9 @@
                         {% for exercise in exercises %}
                             <tr>
                                 <th scope="row">{{ exercise.id }}</th>
-                                <td>{{ exercise.name }}</td>
+                                <td>{{ exercise.exercise_name }}</td>
                                 <td>{{ exercise.description }}</td>
-                                <td>{{ exercise.muscles }}</td>
+                                <td>{{ exercise.muscle_name }}</td>
                                 <td>{{ exercise.created_date }}</td>
                                 <td><a class="btn btn-outline-dark" href="/edit_exercise?exercise_id={{ exercise.id }}" role="button">Edit</a></td>
                                 <td><a class="btn btn-danger" href="/delete_exercise?exercise_id={{ exercise.id }}" role="button" 
