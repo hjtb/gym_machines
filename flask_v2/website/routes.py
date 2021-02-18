@@ -447,6 +447,9 @@ def manage_exercises():
 
     sql = f"SELECT * FROM muscles"
     muscles = db.session.execute(sql)
+    
+    sql = f"SELECT * FROM exercises_muscles"
+    muscles_of_exercises = db.session.execute(sql)
 
     # if there are any url arguments, print them to the console here
     if len(url_arguments) > 0:
@@ -459,6 +462,7 @@ def manage_exercises():
 
     return render_template (
         "manage_exercises.html",
+        muscles_of_exercises=muscles_of_exercises,
         exercises=exercises,
         muscles=muscles,
         form_package=form_package,
@@ -480,6 +484,10 @@ def add_exercise():
 
     sql = f"SELECT * FROM muscles"
     muscles = db.session.execute(sql)
+
+    sql = f"SELECT * FROM exercises_muscles"
+    exercise_muscle = db.session.execute(sql)
+
 
     # When pages contain a form, we can access the variables in this function 
     # if the form was submitted 
@@ -645,6 +653,17 @@ def delete_exercise():
 
     print(f"You are in delete exercise, deleting exercise with ID = {exercise_id}")
 
+    sql = f"DELETE FROM exercises_muscles WHERE exercise_id = {exercise_id}"
+
+    try:
+        exercises = db.session.execute(sql)
+        db.session.commit()
+        flash(f"Deleted exercise-muscle relationships with exercise-id = {exercise_id}", category='success')
+
+    except:
+        flash(f"could not delete exercise with id = {exercise_id}", category='warning')
+        db.session.rollback
+
     sql = f"DELETE FROM exercises WHERE id = {exercise_id}"
 
     try:
@@ -656,6 +675,9 @@ def delete_exercise():
         flash(f"could not delete exercise with id = {exercise_id}", category='warning')
         db.session.rollback
     return redirect("manage_exercises")
+
+    
+
 
 # Now we can define a page to handle 404 errors
 # 404 errors occur when we try to visit a page for

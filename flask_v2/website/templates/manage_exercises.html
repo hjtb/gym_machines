@@ -25,7 +25,7 @@
                             <th scope="col">ID</th> 
                             <th scope="col">Exercise</th>
                             <th scope="col">Description</th>
-                            <th scope="col">Image</th>
+                            <th scope="col">Muscles</th>
                             <th scope="col">Date Created</th>
                             <th scope="col">Edit Exercise</th>
                             <th scope="col">Delete Exercise</th>
@@ -37,7 +37,7 @@
                                 <th scope="row">{{ exercise.id }}</th>
                                 <td>{{ exercise.name }}</td>
                                 <td>{{ exercise.description }}</td>
-                                <td>{{ exercise.image }}</td>
+                                <td>{{ exercise.muscles }}</td>
                                 <td>{{ exercise.created_date }}</td>
                                 <td><a class="btn btn-outline-dark" href="/edit_exercise?exercise_id={{ exercise.id }}" role="button">Edit</a></td>
                                 <td><a class="btn btn-danger" href="/delete_exercise?exercise_id={{ exercise.id }}" role="button" 
