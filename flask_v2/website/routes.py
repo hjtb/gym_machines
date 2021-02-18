@@ -614,6 +614,24 @@ def edit_exercise():
         description = form_package['description'][0]
         name = form_package['name'][0]
 
+        try:
+            sql = f'INSERT INTO exercises_muscles (exercise_id, muscle_id) VALUES '
+            for muscle_id in form_package['muscle_ids']:
+                muscle_id = int(muscle_id)
+                sql = f'{sql} ({exercise.id}, {muscle_id}),'
+            sql = f'{sql[0:-1]};'
+            db.session.execute(sql)
+            db.session.commit()
+            flash(f"Just edited {form_package['name'][0]}", category='success')
+
+        except IntegrityError as err:
+            flash(f"{form_package['name'][0]} already exists.", category='warning')
+            db.session.rollback()
+
+        except Exception as err:
+            flash(f"Could not edit relational db entry with exercise id = {form_package['id'][0]}", category='warning')
+            print(err)
+            db.session.rollback()
 
         sql = f"""
         UPDATE exercises 

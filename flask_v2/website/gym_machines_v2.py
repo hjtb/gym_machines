@@ -226,11 +226,10 @@ Extend knees and hips until legs are straight.
 Return and repeat."""
 
 exercise_dictionary["muscle_ups"]["description"] = f"""
-Squat down by bending hips back while allowing knees to bend forward, 
-keeping back straight and knees pointed same direction as feet. 
-Descend until thighs are just past parallel to floor. 
-Extend knees and hips until legs are straight. 
-Return and repeat."""
+Hang from a pull-up bar/rings with a false grip (thumbs on top the bar, not around).
+Perform a pull up (chest to the bar).
+‘Roll’ the chest over the bar as a transition from a pull-up to a dip.
+Press hands down and drive the body upwards (the dip)."""
 
 exercise_dictionary["dips"]["description"] = f"""
 Squat down by bending hips back while allowing knees to bend forward, 

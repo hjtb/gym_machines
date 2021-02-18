@@ -18,6 +18,7 @@
                   EXERCISES
                 </div>
                 <a href="add_exercise">Add Exercise</a>
+                <a class="btn btn-outline-dark" href="/edit_exercise?exercise_id" role="button">Add New Exercise</a>
 
                 <table class="table">
                     <thead class="thead-light">
@@ -32,18 +33,13 @@
                         </tr>
                     </thead>
 
-                    {% for exercise in exercises_data %}
-                        {{ exercise.muscle_name }}
-                    {% endfor %}
-
-
                     <tbody>
                         {% for exercise in exercises %}
                             <tr>
                                 <th scope="row">{{ exercise.id }}</th>
                                 <td>{{ exercise.name }}</td>
                                 <td>{{ exercise.description }}</td>
-                                <td>{{ exercise.muscle }}</td>
+                                <td>{{ 'bob' }}</td>
                                 <td>{{ exercise.created_date }}</td>
                                 <td><a class="btn btn-outline-dark" href="/edit_exercise?exercise_id={{ exercise.id }}" role="button">Edit</a></td>
                                 <td><a class="btn btn-danger" href="/delete_exercise?exercise_id={{ exercise.id }}" role="button" 
