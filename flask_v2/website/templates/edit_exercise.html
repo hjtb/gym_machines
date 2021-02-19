@@ -28,8 +28,6 @@
                             <label for="description">Exercise Description</label>
                             <textarea id="description" name="description" rows="4" aria-describedby="descriptionhelp" class="form-control">{{ form_package['description'] }}</textarea>
                             <small id="descriptionhelp" class="form-text text-muted">Edit the exercise description here</small>
-
-
                         </div>
                         {% for muscle in muscles %}
                             {% if muscle.id in ticked_muscles_dictionary %}
