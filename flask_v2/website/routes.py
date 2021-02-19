@@ -466,8 +466,15 @@ def manage_exercises():
     """
     exercises_data = db.session.execute(sql)
 
-    sql = f"SELECT * FROM muscles"
-    muscles = db.session.execute(sql)
+    exercise_muscle_dictionary = {}
+
+    for exercise in exercises_data:
+        if not exercise.exercise_name in exercise_muscle_dictionary:
+            exercise_muscle_dictionary[exercise.exercise_name] = []
+            
+        if exercise.muscle_name:
+            entry = exercise_muscle_dictionary[exercise.exercise_name]
+            entry.append(exercise.muscle_name)
 
     # if there are any url arguments, print them to the console here
     if len(url_arguments) > 0:
@@ -480,9 +487,8 @@ def manage_exercises():
 
     return render_template (
         "manage_exercises.html",
+        exercise_muscle_dictionary=exercise_muscle_dictionary,
         exercises=exercises,
-        exercises_data=exercises_data,
-        muscles=muscles,
         form_package=form_package,
         url_arguments=url_arguments,
         THIS_MACHINE=app.config["THIS_MACHINE"]
@@ -601,6 +607,15 @@ def edit_exercise():
 
     print(f"You are in edit exercise, editing exercise with ID = {exercise_id}")
 
+    # lets find which muscles are ticked for this exercise
+    sql = f"SELECT * FROM exercises_muscles WHERE exercise_id = {exercise_id}"
+    ticked_muscles = db.session.execute(sql)
+
+    ticked_muscles_dictionary = {}
+
+    for row in ticked_muscles:
+        ticked_muscles_dictionary[row.muscle_id] = True
+
     # And now check to see if the form was actually submitted
     if request.method == "POST":
 
@@ -614,11 +629,14 @@ def edit_exercise():
         description = form_package['description'][0]
         name = form_package['name'][0]
 
+        sql = f"DELETE FROM exercises_muscles WHERE exercise_id = {id}"
+        deleted_relationship = db.session.execute(sql)
+
         try:
             sql = f'INSERT INTO exercises_muscles (exercise_id, muscle_id) VALUES '
             for muscle_id in form_package['muscle_ids']:
                 muscle_id = int(muscle_id)
-                sql = f'{sql} ({exercise.id}, {muscle_id}),'
+                sql = f'{sql} ({exercise_id}, {muscle_id}),'
             sql = f'{sql[0:-1]};'
             db.session.execute(sql)
             db.session.commit()
@@ -659,6 +677,7 @@ def edit_exercise():
     return render_template (
         "edit_exercise.html",
         muscles=muscles,
+        ticked_muscles_dictionary=ticked_muscles_dictionary,
         form_package=form_package,
         url_arguments=url_arguments,
         THIS_MACHINE=app.config["THIS_MACHINE"]

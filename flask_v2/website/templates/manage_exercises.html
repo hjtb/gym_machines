@@ -35,8 +35,8 @@
 
 
 
-                    {% for exercise in exercises_muscles %}
-                        {{ exercise.exercise_id }}
+                    {% for exercise in exercise_muscle_dictionary %}
+                        {{ exercise }}
                     {% endfor %}
 
                     <tbody>
@@ -48,17 +48,14 @@
                                 <td>
 
                                     <ul class="list-group list-group-flush">
-                                        
+                                        {% set muscles = exercise_muscle_dictionary[exercise.name] %}
                                         {% for muscle in muscles %}
                                             <li class="list-group-item p-0 m-0">
 
-                                                {{ muscle.name }}
-                                
+                                                {{ muscle }}
+                            
                                             </li>
                                         {% endfor %}
-
-                                        <li class="list-group-item p-0 m-0">{{ 'Tom' }}</li>
-                                        <li class="list-group-item p-0 m-0">{{ 'Tim' }}</li>
                                     </ul>
 
                                 </td>
