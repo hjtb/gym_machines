@@ -457,12 +457,12 @@ def manage_exercises():
     exercises = db.session.execute(sql)
 
     sql = f"""
-        select exercises.id, exercises.name as exercise_name, exercises_muscles.muscle_id, muscles.name as muscle_name
-        from exercises 
-        left join exercises_muscles
-        on exercises.id = exercises_muscles.exercise_id
-        left join muscles
-        on muscles.id = exercises_muscles.muscle_id;
+        SELECT exercises.id AS exercise_id, exercises.name AS exercise_name, exercises_muscles.muscle_id, muscles.name AS muscle_name
+        FROM exercises 
+        LEFT JOIN exercises_muscles
+        ON exercises.id = exercises_muscles.exercise_id
+        LEFT JOIN muscles
+        ON muscles.id = exercises_muscles.muscle_id;
     """
     exercises_data = db.session.execute(sql)
 
@@ -526,7 +526,7 @@ def add_exercise():
             db.session.add(exercise)
             db.session.commit()
             flash(f"Just added {form_package['name'][0]}", category='success')
-            sql = f'INSERT INTO exercises_muscles (exercise_id, muscle_id) VALUES '
+            sql = f'INSERT INTO exercises_muscles (exercise_id, muscle_id) VALUES'
             for muscle_id in form_package['muscle_ids']:
                 muscle_id = int(muscle_id)
                 sql = f'{sql} ({exercise.id}, {muscle_id}),'
