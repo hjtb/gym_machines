@@ -26,7 +26,7 @@
                         </div>
                         <div class="form-group">
                             <label for="description">Muscle Description</label>
-                            <input type="text" class="form-control" id="description" name="description" aria-describedby="descriptionhelp">
+                            <textarea id="description" name="description" rows="4" aria-describedby="descriptionhelp" class="form-control">{{ form_package['description'] }}</textarea>
                             <small id="descriptionhelp" class="form-text text-muted">Describe the muscle here</small>
                         </div>
                         <div class="form-group">
@@ -34,7 +34,8 @@
                             <input type="text" class="form-control" id="image" name="image" aria-describedby="imagehelp">
                             <small id="imagehelp" class="form-text text-muted">Enter muscle image here</small>
                         </div>
-                        <button type="submit" class="btn btn-primary">Submit</button>
+                        <button type="submit" class="btn btn-outline-dark">Submit</button>
+                        <button type="submit" href="/manage_muscles" class="btn btn-outline-warning">Cancel</button>
                     </form>
                 </div>
             </div>

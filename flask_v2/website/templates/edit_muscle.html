@@ -26,7 +26,7 @@
                         </div>
                         <div class="form-group">
                             <label for="description">Muscle Description</label>
-                            <input type="text" class="form-control" id="description" name="description" aria-describedby="descriptionhelp" value='{{ form_package['description'] }}'>
+                            <textarea id="description" name="description" rows="4" aria-describedby="descriptionhelp" class="form-control">{{ form_package['description'] }}</textarea>
                             <small id="descriptionhelp" class="form-text text-muted">Edit the muscle description here</small>
                         </div>
                         <div class="form-group">

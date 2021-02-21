@@ -18,7 +18,7 @@
                   EXERCISES
                 </div>
 
-                <a class="btn btn-outline-dark" href="/edit_exercise" role="button">Add New Exercise</a>
+                <a class="btn btn-outline-dark" href="/add_exercise" role="button">Add New Exercise</a>
 
                 <table class="table">
                     <thead class="thead-light">
@@ -32,12 +32,6 @@
                             <th scope="col">Delete Exercise</th>
                         </tr>
                     </thead>
-
-
-
-                    {% for exercise in exercise_muscle_dictionary %}
-                        {{ exercise }}
-                    {% endfor %}
 
                     <tbody>
                         {% for exercise in exercises %}

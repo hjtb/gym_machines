@@ -456,6 +456,9 @@ def manage_exercises():
     sql = f"SELECT * FROM exercises"
     exercises = db.session.execute(sql)
 
+    # sql query to retrieve data from our exercises table, muscles table and relational table to use 
+    # to create our list of muscles corresponding to each exercise
+    # we use left join so even if there isn't a relatinship we will have all the results of both tables
     sql = f"""
         SELECT exercises.id AS exercise_id, exercises.name AS exercise_name, exercises_muscles.muscle_id, muscles.name AS muscle_name
         FROM exercises 
@@ -466,12 +469,16 @@ def manage_exercises():
     """
     exercises_data = db.session.execute(sql)
 
+    # create a dictionary to hold our data and so we can access it in the template
     exercise_muscle_dictionary = {}
 
+    # loop over our data to add the exercises as keys and create empty lists to hold the corresponding muscles
     for exercise in exercises_data:
         if not exercise.exercise_name in exercise_muscle_dictionary:
             exercise_muscle_dictionary[exercise.exercise_name] = []
-            
+
+        # create a conditional for when there are corresponding muscles to be 
+        #  added to the list we previously created and append them        
         if exercise.muscle_name:
             entry = exercise_muscle_dictionary[exercise.exercise_name]
             entry.append(exercise.muscle_name)
@@ -608,11 +615,16 @@ def edit_exercise():
     print(f"You are in edit exercise, editing exercise with ID = {exercise_id}")
 
     # lets find which muscles are ticked for this exercise
+    # we query the exercises_muscles db to get results where the exercise id from
+    # the URL args we got when we clicked the edit exercise button is equal to the 
+    # exercise id in exercises_muscles
     sql = f"SELECT * FROM exercises_muscles WHERE exercise_id = {exercise_id}"
     ticked_muscles = db.session.execute(sql)
 
+    # create a dictionary to hold our corresponding muscle ids 
     ticked_muscles_dictionary = {}
 
+    # 
     for row in ticked_muscles:
         ticked_muscles_dictionary[row.muscle_id] = True
 
@@ -625,13 +637,16 @@ def edit_exercise():
         # print the form fields to the console so we can see it was submitted
         print(f"\nThe form was submitted. The data is:\n{form_package}\n")
 
+        # extracted our data from the form package and tidied it up
         id = int(form_package['id'][0])
         description = form_package['description'][0]
         name = form_package['name'][0]
 
+        # deleted the old entries in the relationship table
         sql = f"DELETE FROM exercises_muscles WHERE exercise_id = {id}"
         deleted_relationship = db.session.execute(sql)
 
+        # updated the relational db first with our new exercise ids with corresponding muscle ids
         try:
             sql = f'INSERT INTO exercises_muscles (exercise_id, muscle_id) VALUES '
             for muscle_id in form_package['muscle_ids']:
@@ -642,15 +657,18 @@ def edit_exercise():
             db.session.commit()
             flash(f"Just edited {form_package['name'][0]}", category='success')
 
+        # create an exception for if there is a duplication
         except IntegrityError as err:
             flash(f"{form_package['name'][0]} already exists.", category='warning')
             db.session.rollback()
 
+        # create an excpetion for all other errors and print err to console for debugging
         except Exception as err:
             flash(f"Could not edit relational db entry with exercise id = {form_package['id'][0]}", category='warning')
             print(err)
             db.session.rollback()
 
+        # create sql to update the exercises db with data from our form package
         sql = f"""
         UPDATE exercises 
         SET name = '{name}',
@@ -663,10 +681,12 @@ def edit_exercise():
             db.session.commit()
             flash(f"Updated exercise with id = {exercise_id}", category='success')
 
+        # create an exception for if there is a duplication
         except IntegrityError as err:
             flash(f"{name} already exists.", category='warning')
             db.session.rollback()
 
+        # create an excpetion for all other errors and print err to console for debugging
         except Exception as err:
             flash(f"Could not update exercise with name = {name}", category='warning')
             print(err)
