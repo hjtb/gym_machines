@@ -1,6 +1,7 @@
 # Import relevant modules
 import secrets
 from sqlalchemy.exc import IntegrityError
+import sqlalchemy
 
 from flask import Flask, request, render_template, url_for, redirect, flash
 
@@ -364,11 +365,22 @@ def edit_muscle():
 
         sql = f"""
         UPDATE muscles 
-        SET name = '{name}',
-            description = '{description}',
-            image = '{image}'
-        WHERE id = {id}
+        SET name = :name,
+            description = :description,
+            image = :image
+        WHERE id = :id
         """
+
+        # convert the sql as string to a sqlalchemy text clause object
+        # so that we can bind the parameters to it before the execute
+        sql = sqlalchemy.text(sql)
+
+        # define a dictionary with keys and values appropriate to the
+        # substitution parameters in the sql
+        query_parameters = dict(name=name, description=description, image=image, id=id)
+
+        # now bind the parameters to the text clause object. (** unpacks the dictionary)
+        sql = sql.bindparams(**query_parameters)
 
         try:
             muscles = db.session.execute(sql)
@@ -650,18 +662,49 @@ def edit_exercise():
         description = form_package['description'][0]
         name = form_package['name'][0]
 
+
+
         # deleted the old entries in the relationship table
-        sql = f"DELETE FROM exercises_muscles WHERE exercise_id = {id}"
+        sql = f"DELETE FROM exercises_muscles WHERE exercise_id = :id"
+
+        # convert the sql as string to a sqlalchemy text clause object
+        # so that we can bind the parameters to it before the execute
+        sql = sqlalchemy.text(sql)
+
+        # define a dictionary with keys and values appropriate to the
+        # substitution parameters in the sql
+        query_parameters = dict(id=id)
+
+        # now bind the parameters to the text clause object. (** unpacks the dictionary)
+        sql = sql.bindparams(**query_parameters)
+
         deleted_relationship = db.session.execute(sql)
 
         # updated the relational db first with our new exercise ids with corresponding muscle ids
         try:
-            sql = f'INSERT INTO exercises_muscles (exercise_id, muscle_id) VALUES '
+
+            # define the sql using the :key notation to indicate where the
+            # substitution parameters are and give them a name
+            # the : notation works across all supported db backends
+            sql = """
+                insert into exercises_muscles 
+                (muscle_id, exercise_id) 
+                VALUES 
+                (:muscle_id, :exercise_id)
+            """
+
+            # convert the sql as string to a sqlalchemy text clause object
+            # so that we can bind the parameters to it before the execute
+            sql = sqlalchemy.text(sql)
+
             for muscle_id in form_package['muscle_ids']:
                 muscle_id = int(muscle_id)
-                sql = f'{sql} ({exercise_id}, {muscle_id}),'
-            sql = f'{sql[0:-1]};'
-            db.session.execute(sql)
+                query_parameters = dict(muscle_id=muscle_id, exercise_id=exercise_id)
+
+                sql_bound = sql.bindparams(**query_parameters)
+
+                db.session.execute(sql_bound)
+
             db.session.commit()
             flash(f"Just edited {form_package['name'][0]}", category='success')
 
@@ -679,10 +722,21 @@ def edit_exercise():
         # create sql to update the exercises db with data from our form package
         sql = f"""
         UPDATE exercises 
-        SET name = '{name}',
-            description = '{description}'
-        WHERE id = {id}
+        SET name = :name,
+            description = :description
+        WHERE id = :id
         """
+
+        # convert the sql as string to a sqlalchemy text clause object
+        # so that we can bind the parameters to it before the execute
+        sql = sqlalchemy.text(sql)
+
+        # define a dictionary with keys and values appropriate to the
+        # substitution parameters in the sql
+        query_parameters = dict(name=name, description=description, id=id)
+
+        # now bind the parameters to the text clause object. (** unpacks the dictionary)
+        sql = sql.bindparams(**query_parameters)
 
         try:
             exercises = db.session.execute(sql)

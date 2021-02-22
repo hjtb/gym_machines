@@ -1,47 +1,63 @@
 {% set title = 'Edit Muscle' %}
 {% extends "base_layout.html" %}
 {% block body %}
-    {% block content %}
+{% block content %}
 
 
-        <div class="jumbotron m-0">
-            <h1 class="display-4">EDIT MUSCLE</h1>
-            <p class="lead">
-                     
-            </p>
+<div class="jumbotron m-0">
+    <h1 class="display-4">EDIT MUSCLE</h1>
+    <p class="lead">
+
+    </p>
+</div>
+
+<div class="container">
+    
+
+
+    <div class="card w-75">
+        <div class="card-header">
+            EDIT MUSCLE
         </div>
-
-        <div class="container">
-            
-            <div class="card" style="width: 50rem;">
-                <div class="card-header">
-                  EDIT MUSCLE
-                </div>
-                <div class="card-body">
-                    <form action="" method="POST">
-                        <div class="form-group">
-                          <label for="name">Muscle Name</label>
-                          <input type="text" class="form-control" id="name" name="name" aria-describedby="namehelp" value='{{ form_package['name'] }}'>
-                          <small id="namehelp" class="form-text text-muted">Edit the muscle name here</small>
-                        </div>
-                        <div class="form-group">
-                            <label for="description">Muscle Description</label>
-                            <textarea id="description" name="description" rows="4" aria-describedby="descriptionhelp" class="form-control">{{ form_package['description'] }}</textarea>
-                            <small id="descriptionhelp" class="form-text text-muted">Edit the muscle description here</small>
-                        </div>
-                        <div class="form-group">
-                            <label for="image">Muscle Image</label>
-                            <input type="text" class="form-control" id="image" name="image" aria-describedby="imagehelp" value='{{ form_package['image'] }}'>
-                            <small id="imagehelp" class="form-text text-muted">Edit muscle image here</small>
-                        </div>
-                        <input type="hidden" name="id" value="{{ form_package['id'] }}">
-                        <button type="submit" class="btn btn-outline-dark">Update</button>
-                        <a href="/manage_muscles" class="btn btn-outline-warning" role="button">Cancel</a>
-                    </form>
-                </div>
+        <form action="">
+            <div class="form-group">
+                <label for="exampleFormControlTextarea1">Example textarea</label>
+                <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
             </div>
+        </form>
+        <div class="card-body">
+            <form action="" method="POST">
+                <div class="form-group">
+                    <label for="name">Muscle Name</label>
+                    <input type="text" class="form-control" id="name" name="name" aria-describedby="namehelp"
+                        value='{{ form_package[' name'] }}'>
+                    <small id="namehelp" class="form-text text-muted">Edit the muscle name here</small>
+                </div>
+                <div class="form-group">
+                    <label for="description">Muscle Description</label>
+                    <textarea id="description" name="description" rows="4" aria-describedby="descriptionhelp"
+                        class="form-control">{{ form_package['description'] }}</textarea>
+                    <small id="descriptionhelp" class="form-text text-muted">Edit the muscle description here</small>
+                </div>
+                <div class="form-group">
+                    <label for="exampleFormControlTextarea1">Example textarea</label>
+                    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="image">Muscle Image</label>
+                    <input type="text" class="form-control" id="image" name="image" aria-describedby="imagehelp"
+                        value='{{ form_package[' image'] }}'>
+                    <small id="imagehelp" class="form-text text-muted">Edit muscle image here</small>
+                </div>
+                <input type="hidden" name="id" value="{{ form_package['id'] }}">
+                <button type="submit" class="btn btn-outline-dark">Update</button>
+                <a href="/manage_muscles" class="btn btn-outline-warning" role="button">Cancel</a>
+            </form>
         </div>
-    {% endblock content %}
+    </div>
+</div>
+{% endblock content %}
 
 
 {% endblock body %}
