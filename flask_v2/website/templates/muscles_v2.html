@@ -34,21 +34,21 @@
 
 
     <div class="row">
-        {% for muscle in muscle_dictionary %}
+        {% for muscle in muscles %}
         <div class="col-lg-6">
             <div class="card my-4">
 
                 <div class="card-header bg-secondary text-light">
 
-                    <h5 class="card-title">{{ muscle|title }}</h5>
+                    <h5 class="card-title">{{ muscle.name|title }}</h5>
                 </div>
                 <div class="row no-gutters">
                     <div class="col-md-6">
-                        <img src="static/images/{{ muscle_dictionary[muscle]['image'] }}" class="card-img">
+                        <img src="static/images/{{ muscle.image }}" class="card-img">
                     </div>
                     <div class="col-md-6">
                         <div class="card-body">
-                            <p class="card-text">{{ muscle_dictionary[muscle]["description"] }}</p>
+                            <p class="card-text">{{ muscle.description }}</p>
                         </div>
                     </div>
                 </div>

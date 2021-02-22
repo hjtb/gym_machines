@@ -186,11 +186,8 @@ Do not use your biceps to assist in lifting the weight."""
 
 exercise_dictionary["pull_ups"]["description"] = f"""
 Reach up and hold onto the bar/rings with an overhand grip. 
-Keep your arms straight and hang from the bar so that your arms are taking all of your weight.
-Keeping your body straight and not swinging your weight, 
-pull your body up towards the bar by pulling your elbows down towards your torso at an angle.
-Continue lifting until your chest is nearly touching the bar. 
-You should feel a “squeeze” at the base of your lats as they contract.
+Keeping your body straight and not swinging, 
+pull your body upwards to the bar by pulling your chest to the bar. 
 Once your lats have completely contracted at the top of the movement, 
 slowly lower your body to the starting position."""
 
@@ -212,18 +209,16 @@ Return to the starting position, lowering your legs slowly until they are straig
 Repeat."""
 
 exercise_dictionary["front_levers"]["description"] = f"""
-Squat down by bending hips back while allowing knees to bend forward, 
-keeping back straight and knees pointed same direction as feet. 
-Descend until thighs are just past parallel to floor. 
-Extend knees and hips until legs are straight. 
-Return and repeat."""
+Assume an inverted(upside-down) hang position on a pull-up bar or gym rings. 
+Keeping the body perfectly straight, 
+lower the body slowly down until completely horizontal. (your body facing upwards). 
+Maintain the hold as long as good form will allow."""
 
 exercise_dictionary["rows"]["description"] = f"""
-Squat down by bending hips back while allowing knees to bend forward, 
-keeping back straight and knees pointed same direction as feet. 
-Descend until thighs are just past parallel to floor. 
-Extend knees and hips until legs are straight. 
-Return and repeat."""
+Set the rings/bar to the appropriate height (the lower the more difficult the exercise). 
+Grip the rings/bar and lean back until your arms are straight. 
+Keep your body straight and pull your chest up level with your hands. 
+Slowly lower yourself back down to the starting position and repeat.."""
 
 exercise_dictionary["muscle_ups"]["description"] = f"""
 Hang from a pull-up bar/rings with a false grip (thumbs on top the bar, not around).
@@ -232,11 +227,10 @@ Perform a pull up (chest to the bar).
 Press hands down and drive the body upwards (the dip)."""
 
 exercise_dictionary["dips"]["description"] = f"""
-Squat down by bending hips back while allowing knees to bend forward, 
-keeping back straight and knees pointed same direction as feet. 
-Descend until thighs are just past parallel to floor. 
-Extend knees and hips until legs are straight. 
-Return and repeat."""
+Adjust the height of the rings/bars so that your feet won't touch the ground.
+Start above the bars/rings, arms straight, supporting your body weight.
+Lower your body steadily down by bending at the elbows, until your shoulders touch your hands.
+Press your body back to the original starting position."""
 
 exercise_dictionary["l_sits"]["description"] = f"""
 Squat down by bending hips back while allowing knees to bend forward, 
@@ -246,13 +240,6 @@ Extend knees and hips until legs are straight.
 Return and repeat."""
 
 exercise_dictionary["ring_press_ups"]["description"] = f"""
-Squat down by bending hips back while allowing knees to bend forward, 
-keeping back straight and knees pointed same direction as feet. 
-Descend until thighs are just past parallel to floor. 
-Extend knees and hips until legs are straight. 
-Return and repeat."""
-
-exercise_dictionary["press_ups"]["description"] = f"""
 Squat down by bending hips back while allowing knees to bend forward, 
 keeping back straight and knees pointed same direction as feet. 
 Descend until thighs are just past parallel to floor. 

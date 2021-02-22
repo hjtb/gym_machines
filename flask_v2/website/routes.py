@@ -93,6 +93,10 @@ def muscles_v2():
     # Create a default form_package in case the form not submitted
     form_package = {}
 
+    # Use sqlalchemy to query the muscles table 
+    sql = f"SELECT * FROM muscles"
+    muscles = db.session.execute(sql)
+
     # And now check to see if the form was actually submitted
     if request.method == "POST":
 
@@ -106,7 +110,7 @@ def muscles_v2():
         "muscles_v2.html",
         form_package=form_package,
         url_arguments=url_arguments,
-        muscle_dictionary=muscle_dictionary,
+        muscles=muscles,
         gym_machines=gym_machines,
         THIS_MACHINE=app.config["THIS_MACHINE"]
     )
@@ -132,6 +136,10 @@ def exercises_v2():
     # Create a default form_package in case the form not submitted
     form_package = {}
 
+    # Use sqlalchemy to query the exercises table
+    sql = f"SELECT * FROM exercises"
+    exercises = db.session.execute(sql)
+
     # And now check to see if the form was actually submitted
     if request.method == "POST":
 
@@ -146,7 +154,7 @@ def exercises_v2():
         form_package=form_package,
         url_arguments=url_arguments,
         muscle_dictionary=muscle_dictionary,
-        exercise_dictionary=exercise_dictionary,
+        exercises=exercises,
         gym_machines=gym_machines,
         THIS_MACHINE=app.config["THIS_MACHINE"]
     )
