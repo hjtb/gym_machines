@@ -5,7 +5,7 @@ import secrets
 # from sqlalchemy import text
 import sqlalchemy
 
-# We will start the web app running using the create_app function defined in __ini__.py
+# We will start the web app running using the create_app function defined in __init__.py
 # so import the function here
 from website import create_app
 
