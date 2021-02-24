@@ -13,7 +13,7 @@
         </div>
 
         <div class="container">
-            <div class="card" style="width: 50rem;">
+            <div class="card w-100">
                 <div class="card-header">
                   MACHINES
                 </div>
@@ -27,6 +27,7 @@
                             <th scope="col">ID</th>
                             <th scope="col">Machine</th>
                             <th scope="col">Description</th>
+                            <th scope="col">Exercises</th>
                             <th scope="col">Date Created</th>
                             <th scope="col">Edit Machine</th>
                             <th scope="col">Delete Machine</th>
@@ -38,9 +39,25 @@
                                 <th scope="row">{{ machine.id }}</th>
                                 <td>{{ machine.name }}</td>
                                 <td>{{ machine.description }}</td>
+                                <td>
+
+                                    <ul class="list-group list-group-flush">
+                                        {% set exercises = machine_exercise_dictionary[machine.name] %}
+                                        {% for exercise in exercises %}
+                                            <li class="list-group-item p-0 m-0">
+
+                                                {{ exercise }}
+                            
+                                            </li>
+                                        {% endfor %}
+                                    </ul>
+
+                                </td>
                                 <td>{{ machine.created_date }}</td>
-                                <td><a class="btn btn-outline-dark" href="#" role="button">Edit</a></td>
-                                <td><a class="btn btn-danger" href="#" role="button">Delete</a></td>
+                                <td><a class="btn btn-outline-dark" href="/edit_machine?machine_id={{ machine.id }}" role="button">Edit</a></td>
+                                <td><a class="btn btn-danger" href="/delete_machine?machine_id={{ machine.id }}" role="button" 
+                                    data-container="body" data-placement="auto" data-toggle="popover" data-html="true" data-trigger = "hover"
+                                    title="If you click this button there's no going back">Delete</a></td>
                             </tr>
                         {% endfor %}
                     </tbody>

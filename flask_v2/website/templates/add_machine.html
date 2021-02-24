@@ -1,0 +1,52 @@
+{% set title = 'Add Machine' %}
+{% extends "base_layout.html" %}
+{% block body %}
+    {% block content %}
+
+
+        <div class="jumbotron m-0">
+            <h1 class="display-4">ADD MACHINE</h1>
+            <p class="lead">
+                     
+            </p>
+        </div>
+
+        <div class="container">
+            
+            <div class="card" style="width: 50rem;">
+                <div class="card-header">
+                  ADD MACHINE
+                </div>
+                <div class="card-body">
+                    <form action="" method="POST">
+                        <div class="form-group">
+                          <label for="name">Machine Name</label>
+                          <input type="text" class="form-control" id="name" name="name" aria-describedby="namehelp">
+                          <small id="namehelp" class="form-text text-muted">Enter the machine name here</small>
+                        </div>
+                        <div class="form-group">
+                            <label for="description">Machine Description</label>
+                            <textarea id="description" name="description" rows="4" aria-describedby="descriptionhelp" class="form-control">{{ form_package['description'] }}</textarea>
+                            <small id="descriptionhelp" class="form-text text-muted">Describe the machine here</small>
+                        </div>
+                        <div class="form-group">
+                            <label for="image">Machine Image</label>
+                            <input type="text" class="form-control" id="image" name="image" aria-describedby="imagehelp">
+                            <small id="imagehelp" class="form-text text-muted">Enter machine image here</small>
+                        </div>
+                        {% for exercise in exercises %}    
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" name="exercise_ids" type="checkbox" id="{{ exercise.id }}" value="{{ exercise.id }}" checked>
+                                <label class="form-check-label" for="{{ exercise.id }}">{{ exercise.name|title }}</label>
+                            </div>
+                        {% endfor %}
+                        <button type="submit" class="btn btn-outline-dark">Submit</button>
+                        <a href="/manage_machines" class="btn btn-outline-warning" role="button">Cancel</a>                    
+                    </form>
+                </div>
+            </div>
+        </div>
+    {% endblock content %}
+
+
+{% endblock body %}
