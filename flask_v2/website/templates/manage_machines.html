@@ -41,16 +41,15 @@
                                 <td>{{ machine.description }}</td>
                                 <td>
 
-                                    <ul class="list-group list-group-flush">
-                                        {% set exercises = machine_exercise_dictionary[machine.name] %}
-                                        {% for exercise in exercises %}
-                                            <li class="list-group-item p-0 m-0">
 
-                                                {{ exercise }}
-                            
-                                            </li>
-                                        {% endfor %}
-                                    </ul>
+                                    <div class="container">
+                                        <div class="row-no row-cols-2">
+                                            {% set exercises = machine_exercise_dictionary[machine.name] %}
+                                            {% for exercise in exercises %}
+                                                    <div class="col">{{ exercise }}</div>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
 
                                 </td>
                                 <td>{{ machine.created_date }}</td>
