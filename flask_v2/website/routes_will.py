@@ -1331,7 +1331,7 @@ def page_not_found(error):
     # or we could do a full blown template
     # And we could include handling logic in this
     # route as well if we needed to
-    return f"There was no such page. The error was - {error}"
+    return f"There was no such page. The error was - {error}",404
 
 
 if __name__ == "__main__":
