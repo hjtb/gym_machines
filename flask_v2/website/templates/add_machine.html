@@ -36,7 +36,7 @@
                         </div>
                         {% for exercise in exercises %}    
                             <div class="form-check form-check-inline">
-                                <input class="form-check-input" name="exercise_ids" type="checkbox" id="{{ exercise.id }}" value="{{ exercise.id }}" checked>
+                                <input class="form-check-input" name="exercise_ids" type="checkbox" id="{{ exercise.id }}" value="{{ exercise.id }}">
                                 <label class="form-check-label" for="{{ exercise.id }}">{{ exercise.name|title }}</label>
                             </div>
                         {% endfor %}

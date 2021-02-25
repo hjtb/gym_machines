@@ -21,10 +21,9 @@ from website.models import Exercise
 # Define our first route (the last part of the url for our website application)
 # We can define what urls should land in this function. Let's say / and /index
 # We can also define the legitimate methods for this page of GET and POST
-
-
 @app.route("/", methods=["GET", "POST"])
 @app.route("/gym_machines_site_sql", methods=["GET", "POST"])
+
 # Now comes the actual function definition for processing this page
 def gym_machines_site_sql():
 
@@ -70,95 +69,8 @@ def gym_machines_site_sql():
         gym_machines=gym_machines,
         specific_machines=specific_machines,
         muscle_from_form=muscle_from_form,
-        THIS_MACHINE=app.config["THIS_MACHINE"]
-        )
+        THIS_MACHINE=app.config["THIS_MACHINE"])
 
-# Define our route (the last part of the url for our website application)
-# We can define what urls should land in this function. Let's say / and /index
-# We can also define the legitimate methods for this page of GET and POST
-@app.route("/muscles_v2", methods=["GET", "POST"])
-
-# Now comes the actual function definition for processing this page
-def muscles_v2():
-
-    # Url arguments can be added to the url like this ?name=Peter&age=57
-    # Get the url arguments if there are any
-    url_arguments = request.args.to_dict(flat=False)
-
-    # if there are any url arguments, print them to the console here
-    if len(url_arguments) > 0:
-        print(f"\nThere were some url arguments and they were:\n{url_arguments}\n")
-
-    # When pages contain a form, we can access the variables in this function
-    # if the form was submitted
-    # Create a default form_package in case the form not submitted
-    form_package = {}
-
-    # Use sqlalchemy to query the muscles table 
-    sql = f"SELECT * FROM muscles"
-    muscles = db.session.execute(sql)
-
-    # And now check to see if the form was actually submitted
-    if request.method == "POST":
-
-        # pull the form fields into a dictionary for ease
-        form_package = request.form.to_dict(flat=False)
-
-        # print the form fields to the console so we can see it was submitted
-        print(f"\nThe form was submitted. The data is:\n{form_package}\n")
-
-    return render_template(
-        "muscles_v2.html",
-        form_package=form_package,
-        url_arguments=url_arguments,
-        muscles=muscles,
-        gym_machines=gym_machines,
-        THIS_MACHINE=app.config["THIS_MACHINE"]
-    )
-
-# Define our route (the last part of the url for our website application)
-# We can define what urls should land in this function. Let's say / and /index
-# We can also define the legitimate methods for this page of GET and POST
-@app.route("/exercises_v2", methods=["GET", "POST"])
-
-# Now comes the actual function definition for processing this page
-def exercises_v2():
-
-    # Url arguments can be added to the url like this ?name=Peter&age=57
-    # Get the url arguments if there are any
-    url_arguments = request.args.to_dict(flat=False)
-
-    # if there are any url arguments, print them to the console here
-    if len(url_arguments) > 0:
-        print(f"\nThere were some url arguments and they were:\n{url_arguments}\n")
-
-    # When pages contain a form, we can access the variables in this function
-    # if the form was submitted
-    # Create a default form_package in case the form not submitted
-    form_package = {}
-
-    # Use sqlalchemy to query the exercises table
-    sql = f"SELECT * FROM exercises"
-    exercises = db.session.execute(sql)
-
-    # And now check to see if the form was actually submitted
-    if request.method == "POST":
-
-        # pull the form fields into a dictionary for ease
-        form_package = request.form.to_dict(flat=False)
-
-        # print the form fields to the console so we can see it was submitted
-        print(f"\nThe form was submitted. The data is:\n{form_package}\n")
-
-    return render_template(
-        "exercises_v2.html",
-        form_package=form_package,
-        url_arguments=url_arguments,
-        muscle_dictionary=muscle_dictionary,
-        exercises=exercises,
-        gym_machines=gym_machines,
-        THIS_MACHINE=app.config["THIS_MACHINE"]
-    )
 
 
 # Define our first route (the last part of the url for our website application)
@@ -197,8 +109,9 @@ def machines_v2():
         url_arguments=url_arguments,
         muscle_dictionary=muscle_dictionary,
         gym_machines=gym_machines,
-        THIS_MACHINE=app.config["THIS_MACHINE"]
-    )
+        THIS_MACHINE=app.config["THIS_MACHINE"])
+
+
 
 @app.route("/manage_machines", methods=["GET", "POST"])
 # Now comes the actual function definition for processing this page
@@ -215,7 +128,7 @@ def manage_machines():
     # sql query to retrieve data from our exercises table, muscles table and relational table to use 
     # to create our list of muscles corresponding to each exercise
     # we use left join so even if there isn't a relatinship we will have all the results of both tables
-    sql = f"""
+    sql = """
         SELECT machines.id AS machine_id, machines.name AS machine_name, machines_exercises.exercise_id, exercises.name AS exercise_name
         FROM machines 
         LEFT JOIN machines_exercises
@@ -257,6 +170,7 @@ def manage_machines():
         THIS_MACHINE=app.config["THIS_MACHINE"])
 
 
+
 @app.route("/add_machine", methods=["GET", "POST"])
 # Now comes the actual function definition for processing this page
 def add_machine():
@@ -280,7 +194,7 @@ def add_machine():
     # Create a default form_package in case the form not submitted 
     form_package = {}
 
-    # And now check to see if the form was actually submitted
+       # And now check to see if the form was actually submitted
     if request.method == "POST":
 
         # pull the form fields into a dictionary for ease
@@ -289,35 +203,23 @@ def add_machine():
         # print the form fields to the console so we can see it was submitted
         print(f"\nThe form was submitted. The data is:\n{form_package}\n")
 
-        # define the sql using the :key notation to indicate where the
-        # substitution parameters are and give them a name
-        # the : notation works across all supported db backends
-        sql = """
-            insert into machines 
-            (name, description, image) 
-            VALUES 
-            (:name, :description, :image)
-        """
+        machine = Machine(name=form_package["name"][0], description=form_package["description"][0], image=form_package["image"][0])
+        try:
+            db.session.add(machine)
+            db.session.commit()
 
-        # define a dictionary with keys and values appropriate to the
-        # substitution parameters in the sql
-        # The dict() method is often more convenient when creating dictionaries with
-        # many key value pairs as it's easier to avoid typing errors
-        query_parameters = dict(name=form_package["name"][0], description=form_package["description"][0], image=form_package["image"][0])
-        
-        
-        # convert the sql as string to a sqlalchemy text clause object
-        # so that we can bind the parameters to it before the execute
-        sql = sqlalchemy.text(sql)
+        except IntegrityError as err:
+            flash(f"{form_package['name'][0]} already exists.", category='warning')
+            db.session.rollback()
+            return redirect(url_for("manage_machines"))
 
-        # now bind the parameters to the text clause object
-        sql = sql.bindparams(**query_parameters)
+        except Exception as err:
+            flash(f"Could not add exercise with name = {form_package['name'][0]}", category='warning')
+            print(err)
+            db.session.rollback()
+            return redirect(url_for("manage_machines"))
 
         try:
-            db.session.execute(sql)
-            db.session.commit()
-            flash(f"Just added {form_package['name'][0]}", category='success')
-
             sql = """
             INSERT INTO machines_exercises 
             (machine_id, exercise_id) 
@@ -325,37 +227,26 @@ def add_machine():
             (:machine_id, :exercise_id)
             """
 
-            # define a dictionary with keys and values appropriate to the
-            # substitution parameters in the sql
-            # The dict() method is often more convenient when creating dictionaries with
-            # many key value pairs as it's easier to avoid typing errors
-            query_parameters = dict(muscle_id=[], exercise_id=exercise.id)
-
-            for exercise_id in form_package['exercise_ids']:
-                exercise_id = int(exercise_id)
-                sql = f'{sql} (:machine_id, :exercise_id),'
-            sql = f'{sql[0:-1]};'
-
             # convert the sql as string to a sqlalchemy text clause object
             # so that we can bind the parameters to it before the execute
             sql = sqlalchemy.text(sql)
 
-            # now bind the parameters to the text clause object
-            sql = sql.bindparams(**query_parameters)
+            for exercise_id in form_package['exercise_ids']:
+                exercise_id = int(exercise_id)
+                query_parameters = dict(machine_id=machine.id, exercise_id=exercise_id)
 
-            db.session.execute(sql)
+                sql_bound = sql.bindparams(**query_parameters)
+
+                db.session.execute(sql_bound)
+
             db.session.commit()
-
-        except IntegrityError as err:
-            flash(f"{form_package['name'][0]} already exists.", category='warning')
-            db.session.rollback()
 
         except Exception as err:
             flash(f"Could not add machine with name = {form_package['name'][0]}", category='warning')
             print(err)
             db.session.rollback()
 
-        return redirect("manage_machines")
+        return redirect(url_for("manage_machines"))
 
     return render_template (
         "add_machine.html",
@@ -546,6 +437,98 @@ def edit_machine():
         form_package=form_package,
         url_arguments=url_arguments,
         THIS_MACHINE=app.config["THIS_MACHINE"])
+
+
+
+
+# Define our route (the last part of the url for our website application)
+# We can define what urls should land in this function. Let's say / and /index
+# We can also define the legitimate methods for this page of GET and POST
+@app.route("/muscles_v2", methods=["GET", "POST"])
+
+# Now comes the actual function definition for processing this page
+def muscles_v2():
+
+    # Url arguments can be added to the url like this ?name=Peter&age=57
+    # Get the url arguments if there are any
+    url_arguments = request.args.to_dict(flat=False)
+
+    # if there are any url arguments, print them to the console here
+    if len(url_arguments) > 0:
+        print(f"\nThere were some url arguments and they were:\n{url_arguments}\n")
+
+    # When pages contain a form, we can access the variables in this function
+    # if the form was submitted
+    # Create a default form_package in case the form not submitted
+    form_package = {}
+
+    # Use sqlalchemy to query the muscles table 
+    sql = f"SELECT * FROM muscles"
+    muscles = db.session.execute(sql)
+
+    # And now check to see if the form was actually submitted
+    if request.method == "POST":
+
+        # pull the form fields into a dictionary for ease
+        form_package = request.form.to_dict(flat=False)
+
+        # print the form fields to the console so we can see it was submitted
+        print(f"\nThe form was submitted. The data is:\n{form_package}\n")
+
+    return render_template(
+        "muscles_v2.html",
+        form_package=form_package,
+        url_arguments=url_arguments,
+        muscles=muscles,
+        gym_machines=gym_machines,
+        THIS_MACHINE=app.config["THIS_MACHINE"]
+    )
+
+# Define our route (the last part of the url for our website application)
+# We can define what urls should land in this function. Let's say / and /index
+# We can also define the legitimate methods for this page of GET and POST
+@app.route("/exercises_v2", methods=["GET", "POST"])
+
+# Now comes the actual function definition for processing this page
+def exercises_v2():
+
+    # Url arguments can be added to the url like this ?name=Peter&age=57
+    # Get the url arguments if there are any
+    url_arguments = request.args.to_dict(flat=False)
+
+    # if there are any url arguments, print them to the console here
+    if len(url_arguments) > 0:
+        print(f"\nThere were some url arguments and they were:\n{url_arguments}\n")
+
+    # When pages contain a form, we can access the variables in this function
+    # if the form was submitted
+    # Create a default form_package in case the form not submitted
+    form_package = {}
+
+    # Use sqlalchemy to query the exercises table
+    sql = f"SELECT * FROM exercises"
+    exercises = db.session.execute(sql)
+
+    # And now check to see if the form was actually submitted
+    if request.method == "POST":
+
+        # pull the form fields into a dictionary for ease
+        form_package = request.form.to_dict(flat=False)
+
+        # print the form fields to the console so we can see it was submitted
+        print(f"\nThe form was submitted. The data is:\n{form_package}\n")
+
+    return render_template(
+        "exercises_v2.html",
+        form_package=form_package,
+        url_arguments=url_arguments,
+        muscle_dictionary=muscle_dictionary,
+        exercises=exercises,
+        gym_machines=gym_machines,
+        THIS_MACHINE=app.config["THIS_MACHINE"]
+    )
+
+
 
 
 

@@ -31,7 +31,7 @@
                         </div>
                         {% for muscle in muscles %}    
                             <div class="form-check form-check-inline">
-                                <input class="form-check-input" name="muscle_ids" type="checkbox" id="{{ muscle.id }}" value="{{ muscle.id }}" checked>
+                                <input class="form-check-input" name="muscle_ids" type="checkbox" id="{{ muscle.id }}" value="{{ muscle.id }}">
                                 <label class="form-check-label" for="{{ muscle.id }}">{{ muscle.name|title }}</label>
                             </div>
                         {% endfor %}
