@@ -84,10 +84,10 @@ def gym_machines_site_sql():
 # Define our route (the last part of the url for our website application)
 # We can define what urls should land in this function. Let's say / and /index
 # We can also define the legitimate methods for this page of GET and POST
-@app.route("/machines_v2", methods=["GET", "POST"])
+@app.route("/machines", methods=["GET", "POST"])
 
 # Now comes the actual function definition for processing this page
-def machines_v2():
+def machines():
 
     # Url arguments can be added to the url like this ?name=Peter&age=57
     # Get the url arguments if there are any
@@ -112,7 +112,7 @@ def machines_v2():
         print(f"\nThe form was submitted. The data is:\n{form_package}\n")
 
     return render_template(
-        "machines_v2.html",
+        "machines.html",
         form_package=form_package,
         url_arguments=url_arguments,
         muscle_dictionary=muscle_dictionary,
@@ -192,10 +192,10 @@ def add_machine():
     if len(url_arguments) > 0:
         print(f"\nThere were some url arguments and they were:\n{url_arguments}\n")
 
-    sql = f"SELECT * FROM exercises"
+    sql = "SELECT * FROM exercises"
     exercises = db.session.execute(sql)
 
-    sql = f"SELECT * FROM machines_exercises"
+    sql = "SELECT * FROM machines_exercises"
     machines_exercises = db.session.execute(sql)
 
     # When pages contain a form, we can access the variables in this function 
@@ -249,6 +249,7 @@ def add_machine():
                 db.session.execute(sql_bound)
 
             db.session.commit()
+            flash(f"Just added {form_package['name'][0]}", category='success')
 
         except Exception as err:
             flash(f"Could not add machine with name = {form_package['name'][0]}", category='warning')
@@ -292,15 +293,29 @@ def edit_machine():
         return redirect(url_for("/"))
 
     # query the db to get the muscles table
-    sql = f"SELECT * FROM exercises"
+    sql = "SELECT * FROM exercises"
     exercises = db.session.execute(sql)
 
     # query the db to get the exercises_muscles table
-    sql = f"SELECT * FROM machines_exercises"
+    sql = "SELECT * FROM machines_exercises"
     machines_exercises = db.session.execute(sql)
 
-    # query the exercises db to get info on selected exercise
-    sql = f"SELECT * FROM machines WHERE id = {machine_id}"
+    # query the machines db to get info on selected exercises
+    sql = """
+    SELECT * FROM machines 
+    WHERE id = :machine_id
+    """
+
+    # convert the sql as string to a sqlalchemy text clause object
+    # so that we can bind the parameters to it before the execute
+    sql = sqlalchemy.text(sql)
+
+    # define a dictionary with keys and values appropriate to the
+    # substitution parameters in the sql
+    query_parameters = dict(machine_id=machine_id)
+
+    # now bind the parameters to the text clause object. (** unpacks the dictionary)
+    sql = sql.bindparams(**query_parameters)
 
     try:
         machine_from_db = db.session.execute(sql).first()
@@ -319,7 +334,22 @@ def edit_machine():
     # we query the machines_muscles db to get results where the machine id from
     # the URL args we got when we clicked the edit machine button is equal to the 
     # machine id in machines_exercises
-    sql = f"SELECT * FROM machines_exercises WHERE machine_id = {machine_id}"
+    sql = """
+        SELECT * FROM machines_exercises 
+        WHERE machine_id = :machine_id
+    """
+
+    # convert the sql as string to a sqlalchemy text clause object
+    # so that we can bind the parameters to it before the execute
+    sql = sqlalchemy.text(sql)
+
+    # define a dictionary with keys and values appropriate to the
+    # substitution parameters in the sql
+    query_parameters = dict(machine_id=machine_id)
+
+    # now bind the parameters to the text clause object. (** unpacks the dictionary)
+    sql = sql.bindparams(**query_parameters)
+
     ticked_exercises = db.session.execute(sql)
 
     # create a dictionary to hold our corresponding muscle ids 
@@ -347,7 +377,10 @@ def edit_machine():
 
 
         # deleted the old entries in the relationship table
-        sql = "DELETE FROM machines_exercises WHERE machine_id = :id"
+        sql = """
+            DELETE FROM machines_exercises 
+            WHERE machine_id = :id
+        """
 
         # convert the sql as string to a sqlalchemy text clause object
         # so that we can bind the parameters to it before the execute
@@ -388,21 +421,23 @@ def edit_machine():
                 db.session.execute(sql_bound)
 
             db.session.commit()
-            flash(f"Just edited {form_package['name'][0]}", category='success')
 
         # create an exception for if there is a duplication
         except IntegrityError as err:
             flash(f"{form_package['name'][0]} already exists.", category='warning')
             db.session.rollback()
+            return redirect(url_for("manage_machines"))
 
         # create an excpetion for all other errors and print err to console for debugging
         except Exception as err:
             flash(f"Could not edit relational db entry with machine id = {form_package['id'][0]}", category='warning')
             print(err)
             db.session.rollback()
+            return redirect(url_for("manage_machines"))
+
 
         # create sql to update the machines db with data from our form package
-        sql = f"""
+        sql = """
         UPDATE machines 
         SET name = :name,
             description = :description,
@@ -424,7 +459,7 @@ def edit_machine():
         try:
             machines = db.session.execute(sql)
             db.session.commit()
-            flash(f"Updated machine with id = {machine_id}", category='success')
+            flash(f"Just edited {form_package['name'][0]}", category='success')
 
         # create an exception for if there is a duplication
         except IntegrityError as err:
@@ -485,18 +520,46 @@ def delete_machine():
 
     print(f"You are in delete machine, deleting machine with ID = {machine_id}")
 
-    sql = f"DELETE FROM machines_exercises WHERE machine_id = {machine_id}"
+    sql = """
+        DELETE FROM machines_exercises 
+        WHERE machine_id = :machine_id
+    """
+
+    # convert the sql as string to a sqlalchemy text clause object
+    # so that we can bind the parameters to it before the execute
+    sql = sqlalchemy.text(sql)
+
+    # define a dictionary with keys and values appropriate to the
+    # substitution parameters in the sql
+    query_parameters = dict(machine_id = machine_id)
+
+    # now bind the parameters to the text clause object. (** unpacks the dictionary)
+    sql = sql.bindparams(**query_parameters)
 
     try:
         machines = db.session.execute(sql)
         db.session.commit()
-        flash(f"Deleted machine-exercise relationships with machine-id = {machine_id}", category='success')
 
     except:
         flash(f"could not delete machine with id = {machine_id}", category='warning')
         db.session.rollback
+        return redirect(url_for("manage_machines"))
 
-    sql = f"DELETE FROM machines WHERE id = {machine_id}"
+    sql = """
+        DELETE FROM machines 
+        WHERE id = :machine_id
+    """
+
+    # convert the sql as string to a sqlalchemy text clause object
+    # so that we can bind the parameters to it before the execute
+    sql = sqlalchemy.text(sql)
+
+    # define a dictionary with keys and values appropriate to the
+    # substitution parameters in the sql
+    query_parameters = dict(machine_id=machine_id)
+
+    # now bind the parameters to the text clause object. (** unpacks the dictionary)
+    sql = sql.bindparams(**query_parameters)
 
     try:
         machines = db.session.execute(sql)
