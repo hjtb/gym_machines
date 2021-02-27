@@ -123,8 +123,8 @@ gym_machines = [
     gym_machine_03,
     gym_machine_04,
     gym_machine_05,
-    gym_machine_06,
     gym_machine_07,
+    gym_machine_06,
 ]
 
 # create a list to populate with our possible exercises

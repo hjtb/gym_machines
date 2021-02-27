@@ -28,6 +28,8 @@
                             <th scope="col"><p class="text-center">Machine</p></th>
                             <th scope="col"><p class="text-center">Description</p></th>
                             <th scope="col"><p class="text-center">Exercises</p></th>
+                            <th scope="col"><p class="text-center">Machine Image</p></th>
+                            <th scope="col"><p class="text-center">Machine in use Image</p></th>
                             <th scope="col"><p class="text-center">Date Created</p></th>
                             <th scope="col"><p class="text-center">Edit Machine</p></th>
                             <th scope="col"><p class="text-center">Delete Machine</p></th>
@@ -40,11 +42,12 @@
                                 <th scope="row">{{ machine.id }}</th>
                                 <td>{{ machine.name }}</td>
                                 <td>{{ machine.description }}</td>
+
                                 <td>
 
 
                                     <div class="container">
-                                        <div class="row no-gutters row-cols-2">
+                                        <div class="row no-gutters row-cols-1">
                                             {% set exercises = machine_exercise_dictionary[machine.name] %}
                                             {% for exercise in exercises %}
                                                     <div class="col border-bottom">{{ exercise }}</div>
@@ -53,6 +56,9 @@
                                     </div>
 
                                 </td>
+
+                                <td>{{ machine.image }}</td>
+                                <td>{{ machine.image_use }}</td>
                                 <td>{{ machine.created_date }}</td>
                                 <td><a class="btn btn-outline-dark" href="/edit_machine?machine_id={{ machine.id }}" role="button">Edit</a></td>
                                 <td><a class="btn btn-danger" href="/delete_machine?machine_id={{ machine.id }}" role="button" 

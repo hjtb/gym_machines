@@ -47,6 +47,7 @@ class Machine(db.Model):
     name = db.Column(db.String(100), unique=True, nullable=False)
     description = db.Column(db.String(500), nullable=False)
     image = db.Column(db.String(100), nullable=False)
+    image_use = db.Column(db.String(100), nullable=False)
     created_date = db.Column(db.DateTime(timezone=True), server_default=func.now())
     exercises = db.relationship("Exercise", secondary=machines_exercises, backref="machines_backref")
 

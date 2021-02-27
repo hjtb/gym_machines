@@ -34,6 +34,11 @@
                             <input type="text" class="form-control" id="image" name="image" aria-describedby="imagehelp" value='{{ form_package['image'] }}'>
                             <small id="imagehelp" class="form-text text-muted">Edit machine image here</small>
                         </div>
+                        <div class="form-group">
+                            <label for="image_use">Machine in use Image</label>
+                            <input type="text" class="form-control" id="image_use" name="image_use" aria-describedby="imagehelp" value='{{ form_package['image_use'] }}'>
+                            <small id="imagehelp" class="form-text text-muted">Edit machine in use image here</small>
+                        </div>
                         {% for exercise in exercises %}
                             {% if exercise.id in ticked_exercises_dictionary %}
                                 {% set checked = "checked" %}
