@@ -50,10 +50,15 @@
                         </div>
                     </div>
                     <div class="card-footer">
-                        <button type="button" class="btn btn-outline-dark btn-lg btn-block" data-placement="top" data-toggle="popover"
+                        <button type="button" class="btn btn-outline-dark" data-placement="top" data-toggle="popover"
                             data-html="true" data-trigger = "hover"
                             title="<img src='static/images/{{ machine.image_use }}'  class='img-fluid rounded'>">
                             See the machine in use
+                        </button>
+                        <button type="button" class="btn btn-outline-dark" data-placement="top" data-toggle="popover"
+                        data-html="true" data-trigger = "hover"
+                        title="{{ machine.description }}">
+                        Machine Description
                         </button>
                     </div>
                 </div>

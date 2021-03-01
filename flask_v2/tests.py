@@ -1,107 +1,46 @@
 import requests
-url = "https://www.bbc.co.uk"
-response = requests.get(url)
+from website import db
+
+site_pages = [
+    {"page":"homepage"}, {"page":"machines"}, {"page":"exercises"}, {"page":"muscles"}, 
+    {"page":"manage_machines"}, {"page":"manage_exercises"}, {"page":"manage_muscles"}, 
+    {"page":"edit_machine"}, {"page":"edit_exercise"}, {"page":"edit_muscle"},
+    {"page":"add_machine"}, {"page":"add_exercise"}, {"page":"add_muscle"}
+    ]
 
 fails = 0
 passes = 0
-
-gym_response = requests.get("http://127.0.0.1:5000")
-
-if gym_response.status_code == 200:
-    print("test 1: index page, passed")
-    passes += 1 
-else:
-    print("test 1: index page, failed")
+test_id = 0
 
 
+for page in site_pages:
+    test_id += 1
+    gym_response = requests.get(f"http://127.0.0.1:5000/{page['page']}")
 
-gym_response = requests.get("http://127.0.0.1:5000/machines_v2")
+    if gym_response.status_code == 200:
+        print(f"test {test_id} : {page['page']}, passed")
+        passes += 1 
+    else:
+        print(f"test {test_id}: index {page['page']}, failed")
+        fails += 1
 
-if gym_response.status_code == 200:
-    print("test 2: machines page, passed")
-else:
-    print("test 2: machines page, failed")
+    gym_response = requests.get(f"http://127.0.0.1:5000/{page['page']}s")
 
+    if gym_response.status_code == 404:
+        print(f"test {test_id} 11: missing page for {page['page']}, passed")
+        passes += 1
+    else:
+        print(f"test {test_id}: missing page for {page['page']}, failed")
+        fails += 1
 
-
-gym_response = requests.get("http://127.0.0.1:5000/exercises_v2")
-
-if gym_response.status_code == 200:
-    print("test 3: exercises page, passed")
-else:
-    print("test 3: exercises page, failed")
-
-
-
-gym_response = requests.get("http://127.0.0.1:5000/muscles_v2")
-
-if gym_response.status_code == 200:
-    print("test 4: muscles page, passed")
-else:
-    print("test 4: muscles page, failed")
+    print()
+    print()
 
 
 
-gym_response = requests.get("http://127.0.0.1:5000/manage_machines")
 
-if gym_response.status_code == 200:
-    print("test 5: manage machines page, passed")
-else:
-    print("test 5: manage machines page, failed")
-
-
-
-gym_response = requests.get("http://127.0.0.1:5000/manage_exercises")
-
-if gym_response.status_code == 200:
-    print("test 6: manage exercises page, passed")
-else:
-    print("test 6: manage exercises page, failed")
-
-
-
-gym_response = requests.get("http://127.0.0.1:5000/manage_muscles")
-
-if gym_response.status_code == 200:
-    print("test 7: manage muscles page, passed")
-else:
-    print("test 7: manage muscles page, failed")
-
-
-
-gym_response = requests.get("http://127.0.0.1:5000/edit_machine")
-
-if gym_response.status_code == 200:
-    print("test 8: edit machines page, passed")
-else:
-    print("test 8: edit machines page, failed")
-
-
-
-gym_response = requests.get("http://127.0.0.1:5000/edit_exercise")
-
-if gym_response.status_code == 200:
-    print("test 9: edit exercises page, passed")
-else:
-    print("test 9: edit exercises page, failed")
-
-
-
-gym_response = requests.get("http://127.0.0.1:5000/edit_muscle")
-
-if gym_response.status_code == 200:
-    print("test 10: edit muscles page, passed")
-else:
-    print("**failed test 10: edit muscles page,")
-
-
-
-gym_response = requests.get("http://127.0.0.1:5000/edit_muscles")
-
-if gym_response.status_code == 404:
-    print("test 11: missing page, passed")
-else:
-    print("test 11: missing page, failed")
+print(f"There were {fails} fails")
+print(f"There were {passes} passes")
 
 
 1/0

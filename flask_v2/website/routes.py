@@ -27,10 +27,10 @@ from website.models import Exercise
 # We can define what urls should land in this function. Let's say / and /index
 # We can also define the legitimate methods for this page of GET and POST
 @app.route("/", methods=["GET", "POST"])
-@app.route("/gym_machines_site_sql", methods=["GET", "POST"])
+@app.route("/homepage", methods=["GET", "POST"])
 
 # Now comes the actual function definition for processing this page
-def gym_machines_site_sql():
+def homepage():
 
     # Url arguments can be added to the url like this ?name=Peter&age=57
     # Get the url arguments if there are any
@@ -67,7 +67,7 @@ def gym_machines_site_sql():
      
 
     return render_template (
-        "gym_machines_site_sql.html",
+        "homepage.html",
         form_package=form_package,
         url_arguments=url_arguments,
         muscle_dictionary=muscle_dictionary,
