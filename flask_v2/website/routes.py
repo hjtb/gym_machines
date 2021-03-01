@@ -154,6 +154,8 @@ def machines():
 
 
 @app.route("/manage_machines", methods=["GET", "POST"])
+@app.route("/edit_machine", methods=["GET", "POST"])
+
 # Now comes the actual function definition for processing this page
 def manage_machines():
 
@@ -659,6 +661,8 @@ def exercises():
 
 
 @app.route("/manage_exercises", methods=["GET", "POST"])
+@app.route("/edit_exercise", methods=["GET", "POST"])
+
 # Now comes the actual function definition for processing this page
 def manage_exercises():
 
@@ -1133,6 +1137,8 @@ def muscles():
 
 
 @app.route("/manage_muscles", methods=["GET", "POST"])
+@app.route("/edit_muscle", methods=["GET", "POST"]) 
+
 # Now comes the actual function definition for processing this page
 def manage_muscles():
 
@@ -1446,8 +1452,6 @@ def delete_muscle():
     return redirect(url_for("manage_muscles"))
 
 
-
-    
 
 
 # Now we can define a page to handle 404 errors
