@@ -15,6 +15,9 @@ from datetime import datetime
 from flask import current_app as app
 from website import db
 from sqlalchemy.sql import func 
+from werkzeug.security import generate_password_hash, check_password_hash
+from flask_login import UserMixin
+
 
 exercises_muscles = db.Table('exercises_muscles',
     db.Column('exercise_id', db.Integer, db.ForeignKey('exercises.id'), primary_key=True),
@@ -68,16 +71,27 @@ class Exercise(db.Model):
         return dict(id=self.id, name=self.name, description=self.description) 
 
 
-class User(db.Model):
+class User(UserMixin,db.Model):
     __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
     user_name = db.Column(db.String(100), unique=True, nullable=False)
+    password = db.Column(db.String(80))
     user_age = db.Column(db.Integer, nullable=False)
     created_date = db.Column(db.DateTime(timezone=True), server_default=func.now())
 
     def __repr__(self):
-        return dict(id=self.id, user_name=self.user_name, user_age=self.user_age) 
+        return dict(id=self.id, user_name=self.user_name, user_age=self.user_age)
 
+    def set_password(self, password):
+        self.password = generate_password_hash(password, method="sha256")
+
+    def check_password(self, password):
+        return check_password_hash(self.password, password) 
+
+if __name__ == "__main__":
+    password = "test"
+    hashed_password = generate_password_hash(password, method="sha256")
+    print(hashed_password)
 
 
 

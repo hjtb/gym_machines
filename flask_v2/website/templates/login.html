@@ -1,0 +1,69 @@
+{% set title = 'Edit Exercise' %}
+{% extends "base_layout.html" %}
+{% block body %}
+{% block content %}
+
+{% macro render_field(field) %}
+<div class="form-group">
+
+    <label for="{{field.name}}" class="">{{ field.label.text}}: </label>
+
+    {{ field(class_="form-control ", **kwargs)|safe}}
+
+    {% for error in field.errors %}
+    <div class="alert alert-warning" role="alert">
+        <span>{{ error }}</span>
+    </div>
+    {% endfor %}
+
+</div>
+{% endmacro %}
+
+{% macro render_submit(field,class="") %}
+<div class="form-group">
+
+    <button class="btn {{class}}" type="submit">{{field.label.text}}</button>
+
+</div>
+{% endmacro %}
+
+<div class="jumbotron m-0">
+    <h1 class="display-4">LOGIN</h1>
+    <p class="lead">
+                
+    </p>
+</div>
+
+<div class="container">
+
+    <div class="card-deck w-50">
+        <div class="card ">
+            <h5 class="card-header">Please log in</h5>
+            <div class="card-body">
+
+                <form class="form-signin" method="POST" action="">
+
+                    <!-- Stop cross form security problems-->
+                    {{ form.csrf_token() }}
+
+                    <div class="">
+
+                        {{render_field(form.name)}}
+                        {{render_field(form.password)}}
+
+                    </div>
+                    <!-- And a submit button-->
+
+                    {{render_submit(form.submit, "btn-secondary")}}
+
+                </form>
+                <p>
+                    Forgot Your Password?
+                    <a href="">Click to Reset It</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
+{% endblock body %}

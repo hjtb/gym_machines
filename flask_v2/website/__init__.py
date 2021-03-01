@@ -7,7 +7,9 @@ import platform
 import os
 import socket
 
+
 from flask import Flask
+from flask_login import LoginManager
 
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
@@ -16,6 +18,12 @@ from flask_migrate import Migrate
 # to create the files and fiolders in the first instance, you need to
 # execute "flask db init" from the conda command window in the project top level directory
 migrate = Migrate()
+
+# set up he global login manager for initialisation with app later
+login_manager = LoginManager()
+login_manager.login_view = "login"
+login_manager.login_message = "Please login to access this page"
+login_manager.login_message_category = "warning"
 
 # instantiate db for initialisation with app later
 db = SQLAlchemy()
@@ -34,11 +42,19 @@ def create_app():
     app.config.from_object('config.Config')
     
     with app.app_context():   
-  
+        
+        from website.models import User
+
         # now all the initiations
         db.init_app(app)
         migrate.init_app(app, db=db)
+        login_manager.init_app(app)
 
+        # create the user loader required for flask login 
+        @login_manager.user_loader
+        def load_user(user_id):
+            user = User.query.filter(User.id == int(user_id)).first()
+            return user
 
         # import the routes
         from website import routes

@@ -1,4 +1,11 @@
+
 # Import relevant modules
+from flask_login import (
+    login_user,
+    login_required,
+    logout_user,
+    current_user,
+)
 import secrets
 from sqlalchemy.exc import IntegrityError
 import sqlalchemy
@@ -8,6 +15,7 @@ from flask import Flask, request, render_template, url_for, redirect, flash
 # Import the Flask webapp instance that we created in the __init__.py
 from flask import current_app as app
 from website import db
+from website.forms import (Login_form,)
 
 from website.gym_machines_v2 import gym_machines
 from website.gym_machines_v2 import muscle_dictionary
@@ -154,7 +162,6 @@ def machines():
 
 
 @app.route("/manage_machines", methods=["GET", "POST"])
-@app.route("/edit_machine", methods=["GET", "POST"])
 
 # Now comes the actual function definition for processing this page
 def manage_machines():
@@ -661,7 +668,6 @@ def exercises():
 
 
 @app.route("/manage_exercises", methods=["GET", "POST"])
-@app.route("/edit_exercise", methods=["GET", "POST"])
 
 # Now comes the actual function definition for processing this page
 def manage_exercises():
@@ -1137,7 +1143,6 @@ def muscles():
 
 
 @app.route("/manage_muscles", methods=["GET", "POST"])
-@app.route("/edit_muscle", methods=["GET", "POST"]) 
 
 # Now comes the actual function definition for processing this page
 def manage_muscles():
@@ -1243,8 +1248,8 @@ def add_muscle():
         )
 
 
-
 @app.route("/edit_muscle", methods=["GET", "POST"])
+@login_required
 # Now comes the actual function definition for processing this page
 def edit_muscle():
 
@@ -1452,6 +1457,61 @@ def delete_muscle():
     return redirect(url_for("manage_muscles"))
 
 
+
+
+
+
+@app.route("/login", methods=["GET", "POST"])
+def login():
+
+    # use the login form defined in forms.py
+    form = Login_form()
+
+    # if the form has been submitted
+    if form.validate_on_submit():
+
+        # we've passed all the basic checks so let's see if the user has this email
+        user = User.query.filter_by(user_name=form.name.data.lower().strip()).first()
+
+        # bingo! this email exists.
+        # But is the password correct
+        if user:
+            if user.check_password(form.password.data):
+
+                # we're in!
+                # so log them in, remember the remember me data
+                login_user(user)
+
+                # see if there was a next page in the args
+                next = request.args.get("next")
+
+                if next:
+                    return redirect(next)
+
+                # and head back to the main page
+                flash("You have logged in succesfully", category="success")
+                return redirect(url_for("homepage"))
+
+        # if you get to here then the details were incorrect
+        flash(
+            "There was a problem logging in. The email and / or password were not recognised",
+            category="warning",
+        )
+        return redirect(url_for("login"))
+
+    # if you get to here then the form has not been submitted
+    return render_template("login.html", form=form)
+
+
+
+@app.route("/logout")
+def logout():
+
+
+    logout_user()
+    flash("You've logged out succesfully", category="success")
+
+    return redirect(url_for("homepage"))
 
 
 # Now we can define a page to handle 404 errors

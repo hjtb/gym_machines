@@ -23,6 +23,7 @@ cd /D "%~dp0"
 rem The following packages are all in the default channel 
 call conda create --name my_conda_virtual_env python=3.6 ^
 flask=1.1.2 ^
+flask-login=0.5.0 ^
 SQLAlchemy=1.3.17 ^
 flask-SQLAlchemy=2.4.1 ^
 alembic=1.4.2 ^
