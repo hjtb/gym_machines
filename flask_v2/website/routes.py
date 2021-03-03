@@ -32,7 +32,7 @@ from website.models import Exercise
 
 
 # Define our first route (the last part of the url for our website application)
-# We can define what urls should land in this function. Let's say / and /index
+# We can define what urls should land in this function. Let's say / and /homepage
 # We can also define the legitimate methods for this page of GET and POST
 @app.route("/", methods=["GET", "POST"])
 @app.route("/homepage", methods=["GET", "POST"])
@@ -162,7 +162,7 @@ def machines():
 
 
 @app.route("/manage_machines", methods=["GET", "POST"])
-
+@login_required
 # Now comes the actual function definition for processing this page
 def manage_machines():
 
@@ -221,6 +221,7 @@ def manage_machines():
 
 
 @app.route("/add_machine", methods=["GET", "POST"])
+@login_required
 # Now comes the actual function definition for processing this page
 def add_machine():
 
@@ -308,6 +309,7 @@ def add_machine():
 
 
 @app.route("/edit_machine", methods=["GET", "POST"])
+@login_required
 # Now comes the actual function definition for processing this page
 def edit_machine():
 
@@ -330,7 +332,7 @@ def edit_machine():
     except:
         print("The url has become corrupted")
         flash(f"The url has become corrupted", category='warning')
-        return redirect(url_for("/"))
+        return redirect(url_for("manage_machines"))
 
     # query the db to get the muscles table
     sql = "SELECT * FROM exercises"
@@ -529,6 +531,7 @@ def edit_machine():
 
 
 @app.route("/delete_machine", methods=["GET", "POST"])
+@login_required
 # Now comes the actual function definition for processing this page
 def delete_machine():
 
@@ -668,7 +671,7 @@ def exercises():
 
 
 @app.route("/manage_exercises", methods=["GET", "POST"])
-
+@login_required
 # Now comes the actual function definition for processing this page
 def manage_exercises():
 
@@ -728,6 +731,7 @@ def manage_exercises():
 
 
 @app.route("/add_exercise", methods=["GET", "POST"])
+@login_required
 # Now comes the actual function definition for processing this page
 def add_exercise():
 
@@ -817,6 +821,7 @@ def add_exercise():
 
 
 @app.route("/edit_exercise", methods=["GET", "POST"])
+@login_required
 # Now comes the actual function definition for processing this page
 def edit_exercise():
 
@@ -839,7 +844,7 @@ def edit_exercise():
     except:
         print("The url has become corrupted")
         flash(f"The url has become corrupted", category='warning')
-        return redirect(url_for("/"))
+        return redirect(url_for("manage_exercises"))
 
     # query the db to get the muscles table
     sql = "SELECT * FROM muscles"
@@ -1030,6 +1035,7 @@ def edit_exercise():
 
 
 @app.route("/delete_exercise", methods=["GET", "POST"])
+@login_required
 # Now comes the actual function definition for processing this page
 def delete_exercise():
 
@@ -1143,7 +1149,7 @@ def muscles():
 
 
 @app.route("/manage_muscles", methods=["GET", "POST"])
-
+@login_required
 # Now comes the actual function definition for processing this page
 def manage_muscles():
 
@@ -1175,6 +1181,7 @@ def manage_muscles():
 
 
 @app.route("/add_muscle", methods=["GET", "POST"])
+@login_required
 # Now comes the actual function definition for processing this page
 def add_muscle():
 
@@ -1272,7 +1279,7 @@ def edit_muscle():
     except:
         print("The url has become corrupted")
         flash(f"The url has become corrupted", category='warning')
-        return redirect(url_for("/"))
+        return redirect(url_for("manage_muscles"))
 
     # query the db to get the exercises table
     sql = "SELECT * FROM exercises"
@@ -1368,6 +1375,7 @@ def edit_muscle():
 
 
 @app.route("/delete_muscle", methods=["GET", "POST"])
+@login_required
 # Now comes the actual function definition for processing this page
 def delete_muscle():
 
@@ -1470,10 +1478,10 @@ def login():
     # if the form has been submitted
     if form.validate_on_submit():
 
-        # we've passed all the basic checks so let's see if the user has this email
+        # we've passed all the basic checks so let's see if the user has this username
         user = User.query.filter_by(user_name=form.name.data.lower().strip()).first()
 
-        # bingo! this email exists.
+        # bingo! this username exists.
         # But is the password correct
         if user:
             if user.check_password(form.password.data):
@@ -1494,13 +1502,16 @@ def login():
 
         # if you get to here then the details were incorrect
         flash(
-            "There was a problem logging in. The email and / or password were not recognised",
+            "There was a problem logging in. The username and / or password were not recognised",
             category="warning",
         )
         return redirect(url_for("login"))
 
     # if you get to here then the form has not been submitted
-    return render_template("login.html", form=form)
+    return render_template(
+        "login.html",
+         form=form,
+         THIS_MACHINE=app.config["THIS_MACHINE"])
 
 
 
@@ -1525,7 +1536,6 @@ def page_not_found(error):
     # And we could include handling logic in this
     # route as well if we needed to
     return f"There was no such page. The error was - {error}",404
-
 
 if __name__ == "__main__":
     app.run(debug=True, host="0.0.0.0")

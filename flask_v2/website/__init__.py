@@ -15,11 +15,11 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 
 # instantiate the migrate for initialisation with app and db later
-# to create the files and fiolders in the first instance, you need to
+# to create the files and folders in the first instance, you need to
 # execute "flask db init" from the conda command window in the project top level directory
 migrate = Migrate()
 
-# set up he global login manager for initialisation with app later
+# set up the global login manager for initialisation with app later
 login_manager = LoginManager()
 login_manager.login_view = "login"
 login_manager.login_message = "Please login to access this page"

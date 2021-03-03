@@ -1,5 +1,6 @@
 {% set title = 'Add Exercise' %}
 {% extends "base_layout.html" %}
+{% set manage_exercises_active = 'active' %}
 {% block body %}
     {% block content %}
 
@@ -13,7 +14,7 @@
 
         <div class="container">
             
-            <div class="card" style="width: 50rem;">
+            <div class="card w-100">
                 <div class="card-header">
                   ADD EXERCISE
                 </div>
@@ -42,6 +43,4 @@
             </div>
         </div>
     {% endblock content %}
-
-
 {% endblock body %}
