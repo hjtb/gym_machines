@@ -71,16 +71,16 @@ class Exercise(db.Model):
         return dict(id=self.id, name=self.name, description=self.description) 
 
 
-class User(UserMixin,db.Model):
+class User(UserMixin, db.Model):
     __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
-    user_name = db.Column(db.String(100), unique=True, nullable=False)
+    username = db.Column(db.String(100), unique=True, nullable=False)
     password = db.Column(db.String(80))
     user_age = db.Column(db.Integer, nullable=False)
     created_date = db.Column(db.DateTime(timezone=True), server_default=func.now())
 
     def __repr__(self):
-        return dict(id=self.id, user_name=self.user_name, user_age=self.user_age)
+        return dict(id=self.id, username=self.username, user_age=self.user_age)
 
     def set_password(self, password):
         self.password = generate_password_hash(password, method="sha256")

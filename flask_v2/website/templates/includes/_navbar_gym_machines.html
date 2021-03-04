@@ -12,10 +12,10 @@
         <li class="nav-item {{ muscles_active }}">
           <a class="nav-link" href="/muscles">Muscle Groups</a>
         </li>
-        {% if current_user == "my.laptop" %}
-          <li class="nav-item {{ exercises_active }}">
-            <a class="nav-link" href="/exercises">Exercises</a>
-          </li>
+        <li class="nav-item {{ exercises_active }}">
+          <a class="nav-link" href="/exercises">Exercises</a>
+        </li>
+        {% if current_user.is_authenticated %}
           <li class="nav-item {{ manage_machines_active }}">
             <a class="nav-link" href="/manage_machines">Manage Machines</a>
           </li>
@@ -25,13 +25,14 @@
           <li class="nav-item {{ manage_muscles_active }}">
             <a class="nav-link" href="/manage_muscles">Manage Muscles</a>
           </li>
-        {% endif %}
-        <li class="nav-item {{ login_active }}">
-          <a class="nav-link" href="/login">Login</a>
-        </li> 
-        <li class="nav-item">
-          <a class="nav-link" href="/logout">Logout</a>
-        </li> 
+          <li class="nav-item">
+            <a class="nav-link" href="/logout">Logout</a>
+          </li>
+        {% else %}
+          <li class="nav-item {{ login_active }}">
+            <a class="nav-link" href="/login">Login</a>
+          </li>
+        {% endif %} 
       </ul>
     </div>
   </nav>

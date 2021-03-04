@@ -15,7 +15,7 @@ from flask import Flask, request, render_template, url_for, redirect, flash
 # Import the Flask webapp instance that we created in the __init__.py
 from flask import current_app as app
 from website import db
-from website.forms import (Login_form,)
+from website.forms import (Login_form)
 
 from website.gym_machines_v2 import gym_machines
 from website.gym_machines_v2 import muscle_dictionary
@@ -562,7 +562,7 @@ def delete_machine():
         machine_id = int(url_arguments["machine_id"][0].strip())
     except:
         flash(f"The url has become corrupted", category='warning')
-        return redirect(url_for("/"))
+        return redirect(url_for("manage_machines"))
 
     print(f"You are in delete machine, deleting machine with ID = {machine_id}")
 
@@ -876,12 +876,18 @@ def edit_exercise():
 
     except:
         flash(f"could not select exercise with id = {exercise_id}", category='warning')
+        return redirect(url_for("manage_exercises"))
 
-    form_package["name"] = exercise_from_db.name
-    form_package["description"] = exercise_from_db.description
-    form_package["id"] = exercise_from_db.id
+    if exercise_from_db:
+        form_package["name"] = exercise_from_db.name
+        form_package["description"] = exercise_from_db.description
+        form_package["id"] = exercise_from_db.id
 
-    print(f"You are in edit exercise, editing exercise with ID = {exercise_id}")
+        print(f"You are in edit exercise, editing exercise with ID = {exercise_id}")
+    
+    else:
+        flash(f"could not select exercise with id = {exercise_id}", category='warning')
+        return redirect(url_for("manage_exercises"))
 
     # lets find which muscles are ticked for this exercise
     # we query the exercises_muscles db to get results where the exercise id from
@@ -964,7 +970,13 @@ def edit_exercise():
             # so that we can bind the parameters to it before the execute
             sql = sqlalchemy.text(sql)
 
-            for muscle_id in form_package['muscle_ids']:
+            try:
+                muscle_ids = form_package["muscle_ids"]
+            
+            except:
+                muscle_ids = []
+
+            for muscle_id in muscle_ids:
                 muscle_id = int(muscle_id)
                 query_parameters = dict(muscle_id=muscle_id, exercise_id=exercise_id)
 
@@ -1066,7 +1078,7 @@ def delete_exercise():
         exercise_id = int(url_arguments["exercise_id"][0].strip())
     except:
         flash(f"The url has become corrupted", category='warning')
-        return redirect(url_for("/"))
+        return redirect(url_for("manage_exercises"))
 
     print(f"You are in delete exercise, deleting exercise with ID = {exercise_id}")
 
@@ -1406,7 +1418,7 @@ def delete_muscle():
         muscle_id = int(url_arguments["muscle_id"][0].strip())
     except:
         flash(f"The url has become corrupted", category='warning')
-        return redirect(url_for("/"))
+        return redirect(url_for("manage_muscles"))
 
     print(f"You are in delete muscle, deleting muscle with ID = {muscle_id}")
 
@@ -1479,7 +1491,7 @@ def login():
     if form.validate_on_submit():
 
         # we've passed all the basic checks so let's see if the user has this username
-        user = User.query.filter_by(user_name=form.name.data.lower().strip()).first()
+        user = User.query.filter_by(username=form.name.data.lower().strip()).first()
 
         # bingo! this username exists.
         # But is the password correct

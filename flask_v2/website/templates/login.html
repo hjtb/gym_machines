@@ -7,7 +7,7 @@
     {% macro render_field(field) %}
     <div class="form-group">
 
-        <label for="{{field.name}}" class="">{{ field.label.text}}: </label>
+        <label for="{{ field.name }}" class="">{{ field.label.text }}: </label>
 
         {{ field(class_="form-control ", **kwargs)|safe}}
 
@@ -23,7 +23,7 @@
     {% macro render_submit(field,class="") %}
     <div class="form-group">
 
-        <button class="btn {{class}}" type="submit">{{field.label.text}}</button>
+        <button class="btn {{ class }}" type="submit">{{ field.label.text }}</button>
 
     </div>
     {% endmacro %}
