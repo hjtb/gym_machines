@@ -364,14 +364,20 @@ def edit_machine():
 
     except:
         flash(f"could not select machine with id = {machine_id}", category='warning')
+        return redirect(url_for("manage_machines"))
 
-    form_package["name"] = machine_from_db.name
-    form_package["description"] = machine_from_db.description
-    form_package["id"] = machine_from_db.id
-    form_package["image"] = machine_from_db.image
-    form_package["image_use"] = machine_from_db.image_use
+    if exercise_from_db:
+        form_package["name"] = machine_from_db.name
+        form_package["description"] = machine_from_db.description
+        form_package["id"] = machine_from_db.id
+        form_package["image"] = machine_from_db.image
+        form_package["image_use"] = machine_from_db.image_use
 
-    print(f"You are in edit machine, editing machine with ID = {machine_id}")
+        print(f"You are in edit machine, editing machine with ID = {machine_id}")
+
+    else:
+        flash(f"could not select machine with id = {machine_id}", category='warning')
+        return redirect(url_for("manage_machines"))
 
     # lets find which exercises are ticked for this machine
     # we query the machines_muscles db to get results where the machine id from
@@ -456,7 +462,13 @@ def edit_machine():
             # so that we can bind the parameters to it before the execute
             sql = sqlalchemy.text(sql)
 
-            for exercise_id in form_package['exercise_ids']:
+            try:
+                muscle_ids = form_package["muscle_ids"]
+
+            except:
+                exercise_ids = []
+
+            for exercise_id in exercise_ids:
                 exercise_id = int(exercise_id)
                 query_parameters = dict(machine_id=machine_id, exercise_id=exercise_id)
 
@@ -465,6 +477,7 @@ def edit_machine():
                 db.session.execute(sql_bound)
 
             db.session.commit()
+            flash(f"Just edited {form_package['name'][0]}", category='success')
 
         # create an exception for if there is a duplication
         except IntegrityError as err:
@@ -991,12 +1004,15 @@ def edit_exercise():
         except IntegrityError as err:
             flash(f"{form_package['name'][0]} already exists.", category='warning')
             db.session.rollback()
+            return redirect(url_for("manage_exercises"))
 
         # create an excpetion for all other errors and print err to console for debugging
         except Exception as err:
             flash(f"Could not edit relational db entry with exercise id = {form_package['id'][0]}", category='warning')
             print(err)
             db.session.rollback()
+            return redirect(url_for("manage_exercises"))
+
 
         # create sql to update the exercises db with data from our form package
         sql = """
