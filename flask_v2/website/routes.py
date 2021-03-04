@@ -366,7 +366,7 @@ def edit_machine():
         flash(f"could not select machine with id = {machine_id}", category='warning')
         return redirect(url_for("manage_machines"))
 
-    if exercise_from_db:
+    if machine_from_db:
         form_package["name"] = machine_from_db.name
         form_package["description"] = machine_from_db.description
         form_package["id"] = machine_from_db.id
