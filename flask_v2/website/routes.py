@@ -269,29 +269,46 @@ def add_machine():
             db.session.rollback()
             return redirect(url_for("manage_machines"))
 
+        # Update relational DB now
         try:
+            # define the sql using the :key notation to indicate where the
+            # substitution parameters are and give them a name
+            # the : notation works across all supported db backends
             sql = """
-            INSERT INTO machines_exercises 
-            (machine_id, exercise_id) 
-            VALUES
-            (:machine_id, :exercise_id)
+                INSERT INTO machines_exercises 
+                (exercise_id, machine_id) 
+                VALUES 
+                (:exercise_id, :machine_id)
             """
 
             # convert the sql as string to a sqlalchemy text clause object
             # so that we can bind the parameters to it before the execute
             sql = sqlalchemy.text(sql)
 
-            for exercise_id in form_package['exercise_ids']:
+            try:
+                exercise_ids = form_package["exercise_ids"]
+            
+            except:
+                exercise_ids = []
+
+            for exercise_id in exercise_ids:
                 exercise_id = int(exercise_id)
-                query_parameters = dict(machine_id=machine.id, exercise_id=exercise_id)
+                query_parameters = dict(machine_id=machine_id, exercise_id=exercise_id)
 
                 sql_bound = sql.bindparams(**query_parameters)
 
                 db.session.execute(sql_bound)
 
             db.session.commit()
-            flash(f"Just added {form_package['name'][0]}", category='success')
+            flash(f"Just added {form_package['name'][0]} to DB", category='success')
 
+        # create an exception for if there is a duplication
+        except IntegrityError as err:
+            flash(f"{name} already exists.", category='warning')
+            db.session.rollback()
+            return redirect(url_for("manage_machines"))
+
+        # create an exception for all other errors and print err to console for debugging
         except Exception as err:
             flash(f"Could not add machine with name = {form_package['name'][0]}", category='warning')
             print(err)
@@ -401,7 +418,7 @@ def edit_machine():
 
     ticked_exercises = db.session.execute(sql)
 
-    # create a dictionary to hold our corresponding muscle ids 
+    # create a dictionary to hold our corresponding exercise ids 
     ticked_exercises_dictionary = {}
 
     # 
@@ -452,7 +469,7 @@ def edit_machine():
             # substitution parameters are and give them a name
             # the : notation works across all supported db backends
             sql = """
-                insert into machines_exercises 
+                INSERT INTO machines_exercises 
                 (exercise_id, machine_id) 
                 VALUES 
                 (:exercise_id, :machine_id)
@@ -463,7 +480,7 @@ def edit_machine():
             sql = sqlalchemy.text(sql)
 
             try:
-                muscle_ids = form_package["muscle_ids"]
+                exercise_ids = form_package["exercise_ids"]
 
             except:
                 exercise_ids = []
@@ -477,7 +494,6 @@ def edit_machine():
                 db.session.execute(sql_bound)
 
             db.session.commit()
-            flash(f"Just edited {form_package['name'][0]}", category='success')
 
         # create an exception for if there is a duplication
         except IntegrityError as err:
@@ -756,6 +772,7 @@ def add_exercise():
     if len(url_arguments) > 0:
         print(f"\nThere were some url arguments and they were:\n{url_arguments}\n")
 
+    # query the db to get the muscles table
     sql = "SELECT * FROM muscles"
     muscles = db.session.execute(sql)
 
@@ -792,8 +809,11 @@ def add_exercise():
             db.session.rollback()
             return redirect(url_for("manage_exercises"))
 
-
+        # Update relational DB now
         try:
+            # define the sql using the :key notation to indicate where the
+            # substitution parameters are and give them a name
+            # the : notation works across all supported db backends
             sql = """
             INSERT INTO exercises_muscles 
             (exercise_id, muscle_id) 
@@ -805,7 +825,13 @@ def add_exercise():
             # so that we can bind the parameters to it before the execute
             sql = sqlalchemy.text(sql)
 
-            for muscle_id in form_package['muscle_ids']:
+            try:
+                muscle_ids = form_package["muscle_ids"]
+            
+            except:
+                muscle_ids = []
+
+            for muscle_id in muscle_ids:
                 muscle_id = int(muscle_id)
                 query_parameters = dict(muscle_id=muscle_id, exercise_id=exercise.id)
 
@@ -816,11 +842,17 @@ def add_exercise():
             db.session.commit()
             flash(f"Just added {form_package['name'][0]}", category='success')
 
+        # create an exception for if there is a duplication
+        except IntegrityError as err:
+            flash(f"{name} already exists.", category='warning')
+            db.session.rollback()
+            return redirect(url_for("manage_exercises"))
+
+        # create an exception for all other errors and print err to console for debugging
         except Exception as err:
-            flash(f"Could not add exercise with name = {form_package['name'][0]}", category='warning')
+            flash(f"Could not add exercise with name = {form_package['name'][0]} to DB", category='warning')
             print(err)
             db.session.rollback()
-
         return redirect(url_for("manage_exercises"))
 
     return render_template (
@@ -828,8 +860,7 @@ def add_exercise():
         muscles=muscles,
         form_package=form_package,
         url_arguments=url_arguments,
-        THIS_MACHINE=app.config["THIS_MACHINE"]
-        )
+        THIS_MACHINE=app.config["THIS_MACHINE"])
 
 
 
@@ -973,7 +1004,7 @@ def edit_exercise():
             # substitution parameters are and give them a name
             # the : notation works across all supported db backends
             sql = """
-                insert into exercises_muscles 
+                INSERT INTO exercises_muscles 
                 (muscle_id, exercise_id) 
                 VALUES 
                 (:muscle_id, :exercise_id)
@@ -998,15 +1029,14 @@ def edit_exercise():
                 db.session.execute(sql_bound)
 
             db.session.commit()
-            flash(f"Just edited {form_package['name'][0]}", category='success')
 
         # create an exception for if there is a duplication
         except IntegrityError as err:
-            flash(f"{form_package['name'][0]} already exists.", category='warning')
+            flash(f"{name} already exists.", category='warning')
             db.session.rollback()
             return redirect(url_for("manage_exercises"))
 
-        # create an excpetion for all other errors and print err to console for debugging
+        # create an exception for all other errors and print err to console for debugging
         except Exception as err:
             flash(f"Could not edit relational db entry with exercise id = {form_package['id'][0]}", category='warning')
             print(err)
@@ -1036,7 +1066,7 @@ def edit_exercise():
         try:
             exercises = db.session.execute(sql)
             db.session.commit()
-            flash(f"Updated exercise with id = {exercise_id}", category='success')
+            flash(f"Just edited {name}", category='success')
 
         # create an exception for if there is a duplication
         except IntegrityError as err:
@@ -1057,8 +1087,7 @@ def edit_exercise():
         ticked_muscles_dictionary=ticked_muscles_dictionary,
         form_package=form_package,
         url_arguments=url_arguments,
-        THIS_MACHINE=app.config["THIS_MACHINE"]
-        )
+        THIS_MACHINE=app.config["THIS_MACHINE"])
 
 
 
@@ -1103,22 +1132,43 @@ def delete_exercise():
         WHERE exercise_id = :exercise_id
     """
 
+    # convert the sql as string to a sqlalchemy text clause object
+    # so that we can bind the parameters to it before the execute
+    sql = sqlalchemy.text(sql)
+
+    # define a dictionary with keys and values appropriate to the
+    # substitution parameters in the sql
+    query_parameters = dict(exercise_id=exercise_id)
+
+    # now bind the parameters to the text clause object. (** unpacks the dictionary)
+    sql = sql.bindparams(**query_parameters)
+
     try:
-        exercises = db.session.execute(sql)
+        deleted_relationship = db.session.execute(sql)
         db.session.commit()
 
     except:
         flash(f"could not delete exercise with id = {exercise_id}", category='warning')
         db.session.rollback
-        return redirect(url_for("manage_exercises"))
+        #return redirect(url_for("manage_exercises"))
 
     sql = """
         DELETE FROM exercises 
         WHERE id = :exercise_id
     """
+    # convert the sql as string to a sqlalchemy text clause object
+    # so that we can bind the parameters to it before the execute
+    sql = sqlalchemy.text(sql)
+
+    # define a dictionary with keys and values appropriate to the
+    # substitution parameters in the sql
+    query_parameters = dict(exercise_id=exercise_id)
+
+    # now bind the parameters to the text clause object. (** unpacks the dictionary)
+    sql = sql.bindparams(**query_parameters)
 
     try:
-        exercises = db.session.execute(sql)
+        deleted_exercise = db.session.execute(sql)
         db.session.commit()
         flash(f"Deleted exercise with id = {exercise_id}", category='success')
 
@@ -1126,6 +1176,9 @@ def delete_exercise():
         flash(f"could not delete exercise with id = {exercise_id}", category='warning')
         db.session.rollback
     return redirect(url_for("manage_exercises"))
+
+
+
 
 
 
@@ -1203,8 +1256,7 @@ def manage_muscles():
         muscles=muscles,
         form_package=form_package,
         url_arguments=url_arguments,
-        THIS_MACHINE=app.config["THIS_MACHINE"]
-        )
+        THIS_MACHINE=app.config["THIS_MACHINE"])
 
 
 
@@ -1258,7 +1310,6 @@ def add_muscle():
         # print the form fields to the console so we can see it was submitted
         print(f"\nThe form was submitted. The data is:\n{form_package}\n")
 
-        # muscle = Muscle(name=form_package["name"][0], description=form_package["description"][0], image=form_package["image"][0])
         try:
             db.session.execute(sql)
             db.session.commit()
@@ -1380,7 +1431,7 @@ def edit_muscle():
         try:
             muscles = db.session.execute(sql)
             db.session.commit()
-            flash(f"Updated muscle with id = {muscle_id}", category='success')
+            flash(f"Just edited {name}", category='success')
 
         except IntegrityError as err:
             flash(f"{name} already exists.", category='warning')
@@ -1454,10 +1505,9 @@ def delete_muscle():
     # now bind the parameters to the text clause object. (** unpacks the dictionary)
     sql = sql.bindparams(**query_parameters)
 
-    deleted_relationship = db.session.execute(sql)
 
     try:
-        exercises = db.session.execute(sql)
+        deleted_relationship = db.session.execute(sql)
         db.session.commit()
 
     except:
@@ -1480,10 +1530,8 @@ def delete_muscle():
     # now bind the parameters to the text clause object. (** unpacks the dictionary)
     sql = sql.bindparams(**query_parameters)
 
-    deleted_relationship = db.session.execute(sql)
-
     try:
-        muscles = db.session.execute(sql)
+        deleted_muscle = db.session.execute(sql)
         db.session.commit()
         flash(f"Deleted muscle with id = {muscle_id}", category='success')
 

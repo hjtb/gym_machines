@@ -28,8 +28,7 @@
                             <th scope="col"><p class="text-center">Machine</p></th>
                             <th scope="col"><p class="text-center">Description</p></th>
                             <th scope="col"><p class="text-center">Exercises</p></th>
-                            <th scope="col"><p class="text-center">Machine Image</p></th>
-                            <th scope="col"><p class="text-center">Machine in use Image</p></th>
+                            <th scope="col"><p class="text-center">Machine Images</p></th>
                             <th scope="col"><p class="text-center">Date Created</p></th>
                             <th scope="col"><p class="text-center">Edit Machine</p></th>
                             <th scope="col"><p class="text-center">Delete Machine</p></th>
@@ -57,8 +56,13 @@
 
                                 </td>
 
-                                <td>{{ machine.image }}</td>
-                                <td>{{ machine.image_use }}</td>
+                                <td>
+                                    <div class="row no-gutters row-cols-1">
+                                        <div class="col border-bottom">{{ machine.image }}</div>
+                                        <div class="col border-bottom">{{ machine.image_use }}</div>
+                                    </div>
+                                </td>
+
                                 <td>{{ machine.created_date }}</td>
                                 <td><a class="btn btn-outline-dark" href="/edit_machine?machine_id={{ machine.id }}" role="button">Edit</a></td>
                                 <td><a class="btn btn-danger" href="/delete_machine?machine_id={{ machine.id }}" role="button" 
