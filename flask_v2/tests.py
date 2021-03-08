@@ -5,7 +5,7 @@ base_url = "http://127.0.0.1:5000/"
 def get_logged_in_user():
 
     # quite a long and detailed test.
-    # performs the sign up for a new user with a random @dt-squad.com email address
+    # performs the sign up for a new user with a mock username
     # then logs that new user in
     # and finally tests the logging out
 

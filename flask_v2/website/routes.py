@@ -1,21 +1,19 @@
 
 # Import relevant modules
-from flask_login import (
-    login_user,
-    login_required,
-    logout_user,
-    current_user,
-)
-import secrets
+from flask_login import (login_user, login_required, logout_user, current_user)
+from werkzeug.security import generate_password_hash, check_password_hash
 from sqlalchemy.exc import IntegrityError
+
+import secrets
 import sqlalchemy
 
-from flask import Flask, request, render_template, url_for, redirect, flash
 
 # Import the Flask webapp instance that we created in the __init__.py
+from flask import Flask, request, render_template, url_for, redirect, flash
 from flask import current_app as app
+
 from website import db
-from website.forms import (Login_form)
+from website.forms import (Login_form, Registration_form)
 
 from website.gym_machines_v2 import gym_machines
 from website.gym_machines_v2 import muscle_dictionary
@@ -1555,7 +1553,7 @@ def login():
     if form.validate_on_submit():
 
         # we've passed all the basic checks so let's see if the user has this username
-        user = User.query.filter_by(username=form.name.data.lower().strip()).first()
+        user = User.query.filter_by(username=form.username.data.lower().strip()).first()
 
         # bingo! this username exists.
         # But is the password correct
@@ -1599,6 +1597,35 @@ def logout():
     flash("You've logged out succesfully", category="success")
 
     return redirect(url_for("homepage"))
+
+
+
+@app.route("/registration", methods=["GET", "POST"])
+def registration():
+
+    # use the login form defined in forms.py
+    form = Registration_form()
+
+    # if the form has been submitted
+    if form.validate_on_submit():
+
+        hashed_password = generate_password_hash(form.password.data, method="sha256")
+
+        user = User(username=form.username.data, user_age=form.user_age.data, password=hashed_password)
+
+        db.session.add(user)
+        db.session.commit()
+
+        # and head back to the main page
+        flash("You have registered succesfully, you can now login", category="success")
+        return redirect(url_for("login"))
+        
+    # if you get to here then the form has not been submitted
+    return render_template(
+        "registration.html",
+         form=form,
+         THIS_MACHINE=app.config["THIS_MACHINE"])
+
 
 
 # Now we can define a page to handle 404 errors

@@ -1,13 +1,13 @@
-{% set title = 'Login' %}
+{% set title = 'Registration' %}
 {% extends "base_layout.html" %}
-{% set login_active = 'active' %}
+{% set registration_active = 'active' %}
 {% block body %}
     {% block content %}
 
     {% macro render_field(field) %}
     <div class="form-group">
 
-        <label for="{{ field.username }}" class="">{{ field.label.text }}: </label>
+        <label for="{{ field.name }}" class="">{{ field.label.text }}: </label>
 
         {{ field(class_="form-control ", **kwargs)|safe}}
 
@@ -29,7 +29,7 @@
     {% endmacro %}
 
     <div class="jumbotron m-0">
-        <h1 class="display-4">LOGIN</h1>
+        <h1 class="display-4">SIGN UP</h1>
         <p class="lead">
                     
         </p>
@@ -39,7 +39,7 @@
 
         <div class="card-deck w-50">
             <div class="card ">
-                <h5 class="card-header">Please log in</h5>
+                <h5 class="card-header">Register your Account</h5>
                 <div class="card-body">
 
                     <form class="form-signin" method="POST" action="">
@@ -50,21 +50,28 @@
                         <div class="">
 
                             {{render_field(form.username)}}
+                            {{render_field(form.user_age)}}
                             {{render_field(form.password)}}
+                            {{render_field(form.confirm_password)}}
 
                         </div>
                         <!-- And a submit button-->
 
-                        {{render_submit(form.submit, "btn-secondary")}}
+                        {{render_submit(form.submit, "btn-outline-dark")}}
 
                     </form>
-                    <p>
-                        Forgot Your Password?
-                        <a href="">Click to Reset It</a>
-                    </p>
+                    <div class="border-top pt-3">
+                        <small class="text-muted">
+                            Already Have An Account? <a class="ml-2" href="/login">Sign In</a>
+                        </small>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
     {% endblock content %}
 {% endblock body %}
+
+
+
+
