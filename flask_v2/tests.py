@@ -16,7 +16,7 @@ def get_logged_in_user():
     headers = {"User-Agent": "Mozilla/5.0"}
 
     payload = dict(
-                name="will",
+                username="will",
                 password="test",
             )
 
@@ -67,12 +67,25 @@ def get_csrf(text):
     return csrf_token
 
 site_pages = [
+    {"page":"registration", "status_code":200},
     {"page":"login", "status_code":200},
     {"page":"edit_exercise?exercise_id=1700", "status_code":200},
-    {"page":"homepage", "status_code":200}, {"page":"machines", "status_code":200}, {"page":"exercises", "status_code":200}, {"page":"muscles", "status_code":200}, 
-    {"page":"manage_machines", "status_code":200}, {"page":"manage_exercises", "status_code":200}, {"page":"manage_muscles", "status_code":200}, 
-    {"page":"edit_machine?machine_id=17", "status_code":200}, {"page":"edit_exercise?exercise_id=17", "status_code":200}, {"page":"edit_muscle?muscle_id=1", "status_code":200},
-    {"page":"add_machine", "status_code":200}, {"page":"add_exercise", "status_code":200}, {"page":"add_muscle", "status_code":200},
+    {"page":"edit_exercise?exercise_id=17", "status_code":200},
+    {"page":"edit_exercise?exercise_id=hello", "status_code":200},
+    {"page":"edit_exercise", "status_code":200},
+    {"page":"homepage", "status_code":200}, 
+    {"page":"machines", "status_code":200}, 
+    {"page":"exercises", "status_code":200}, 
+    {"page":"muscles", "status_code":200}, 
+    {"page":"manage_machines", "status_code":200}, 
+    {"page":"manage_exercises", "status_code":200}, 
+    {"page":"manage_muscles", "status_code":200}, 
+    {"page":"edit_machine?machine_id=17", "status_code":200}, 
+    {"page":"edit_exercise?exercise_id=17", "status_code":200}, 
+    {"page":"edit_muscle?muscle_id=1", "status_code":200},
+    {"page":"add_machine", "status_code":200}, 
+    {"page":"add_exercise", "status_code":200}, 
+    {"page":"add_muscle", "status_code":200},
     {"page":"login", "status_code":200},
     {"page":"this page does not exist", "status_code":404}
     ]
