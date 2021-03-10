@@ -51,35 +51,213 @@ def homepage():
     # Create a default form_package in case the form not submitted 
     form_package = {}
 
+    # Use sqlalchemy to query the machines table 
+    sql = "SELECT * FROM machines"
+    machines = db.session.execute(sql)
+
+    # Use sqlalchemy to query the muscles table 
+    sql = "SELECT * FROM muscles"
+    muscles = db.session.execute(sql)
+
+    # Use sqlalchemy to query the muscles table 
+    sql = "SELECT * FROM exercises"
+    exercises = db.session.execute(sql)
+
+    # Use sqlalchemy to query the muscles table 
+    sql = "SELECT * FROM exercises_muscles"
+    exercises_muscles = db.session.execute(sql)
+
+    # Use sqlalchemy to query the machines table 
+    sql = "SELECT * FROM machines_exercises"
+    machines_exercises = db.session.execute(sql)
+
     specific_machines = []
+    specific_exercises = []
     muscle_from_form = ""
-    
+    selected_muscle_db = ""
+
     # And now check to see if the form was actually submitted
     if request.method == "POST":
 
         # pull the form fields into a dictionary for ease
         form_package = request.form.to_dict(flat=False)
 
-        # print the form fields to the console so we can see it was submitted
-        print(f"\nThe form was submitted. The data is:\n{form_package}\n")
+        muscle_id_from_form = int(form_package.get("muscle")[0])
 
-        # create a for loop to loop through our machines to determine which machines can be used for the target muscle
-        for gym_machine in gym_machines:
-            for exercise, muscles in gym_machine["exercises"].items():
-                muscle_from_form = form_package.get("muscle")[0]
-                if muscle_from_form.lower() in muscles:
-                    if gym_machine not in specific_machines:
-                        specific_machines.append(gym_machine)
+        # Use sqlalchemy to query the muscles table 
+        sql = """
+            SELECT * FROM muscles
+            WHERE id = :muscle_id_from_form
+            """
+
+        # convert the sql as string to a sqlalchemy text clause object
+        # so that we can bind the parameters to it before the execute
+        sql = sqlalchemy.text(sql)
+
+        # define a dictionary with keys and values appropriate to the
+        # substitution parameters in the sql
+        query_parameters = dict(muscle_id_from_form=muscle_id_from_form)
+
+        # now bind the parameters to the text clause object. (** unpacks the dictionary)
+        sql = sql.bindparams(**query_parameters)
+
+        # got our selected muscle in a form we 
+        try:
+            selected_muscle_db = db.session.execute(sql).first()
+
+        except:
+            flash(f"could not select muscle", category='warning')
+            return redirect(url_for("homepage"))
+
+
+        specific_exercise_ids = []
+
+        # Use sqlalchemy to query the exercises_muscles table 
+        sql = """
+            SELECT * FROM exercises_muscles
+            WHERE muscle_id = :muscle_id_from_form
+            """
+
+        # convert the sql as string to a sqlalchemy text clause object
+        # so that we can bind the parameters to it before the execute
+        sql = sqlalchemy.text(sql)
+
+        # define a dictionary with keys and values appropriate to the
+        # substitution parameters in the sql
+        query_parameters = dict(muscle_id_from_form=muscle_id_from_form)
+
+        # now bind the parameters to the text clause object. (** unpacks the dictionary)
+        sql = sql.bindparams(**query_parameters)
+
+        try:
+            muscle_exercise_ids = db.session.execute(sql)
+
+        except:
+            flash(f"could not select exercise_ids", category='warning')
+            return redirect(url_for("homepage"))
+
+        for exercise_id in muscle_exercise_ids:
+            specific_exercise_ids.append(exercise_id[0])
+
+        # Use sqlalchemy to query the exercises_muscles table and get our exercises
+        sql = """
+            SELECT * FROM exercises
+            WHERE id = :exercise_id
+            """
+
+        # convert the sql as string to a sqlalchemy text clause object
+        # so that we can bind the parameters to it before the execute
+        sql = sqlalchemy.text(sql)
+
+        try:
+            for exercise_id in specific_exercise_ids:
+                exercise_id = int(exercise_id)
+                query_parameters = dict(exercise_id=exercise_id)
+
+                sql_bound = sql.bindparams(**query_parameters)
+
+                specific_exercise = db.session.execute(sql_bound)
+                
+                specific_exercises.append(specific_exercise)
+
+        except:
+            flash(f"could not select exercises", category='warning')
+            return redirect(url_for("homepage"))
+
+        specific_machine_ids = []
+
+        # Use sqlalchemy to query the exercises_muscles table 
+        sql = """
+            SELECT * FROM machines_exercises
+            WHERE exercise_id = :specific_exercise_id
+            """
+
+        # convert the sql as string to a sqlalchemy text clause object
+        # so that we can bind the parameters to it before the execute
+        sql = sqlalchemy.text(sql)
+
+        try:
+            for exercise_id in specific_exercise_ids:
+                specific_exercise_id = int(exercise_id)
+                query_parameters = dict(specific_exercise_id=specific_exercise_id)
+
+                sql_bound = sql.bindparams(**query_parameters)
+
+                exercise_machine_ids = db.session.execute(sql_bound)
+                
+                for specific_machine_id in exercise_machine_ids:
+                    specific_machine_ids.append(specific_machine_id[0])
+
+        except:
+            flash(f"could not select machines", category='warning')
+            return redirect(url_for("homepage")) 
+        
+        # Use sqlalchemy to query the exercises_muscles table and get our exercises
+        sql = """
+            SELECT * FROM machines
+            WHERE id = :machine_id
+            """
+
+        # convert the sql as string to a sqlalchemy text clause object
+        # so that we can bind the parameters to it before the execute
+        sql = sqlalchemy.text(sql)
+
+        try:
+            for machine_id in specific_machine_ids:
+                machine_id = int(machine_id)
+                query_parameters = dict(machine_id=machine_id)
+
+                sql_bound = sql.bindparams(**query_parameters)
+
+                unsorted_machines = db.session.execute(sql_bound)
+
+                for machine in unsorted_machines:
+                    specific_machines.append(machine)
+
+        except:
+            flash(f"could not select exercises", category='warning')
+            return redirect(url_for("homepage"))     
+
+        for machine in specific_machines:
+            print(machine.name)
+
+    # sql query to retrieve data from our exercises table, muscles table and relational table to use 
+    # to create our list of muscles corresponding to each exercise
+    # we use left join so even if there isn't a relatinship we will have all the results of both tables
+    sql = """
+        SELECT machines.id AS machine_id, machines.name AS machine_name, machines_exercises.exercise_id, exercises.name AS exercise_name
+        FROM machines 
+        LEFT JOIN machines_exercises
+        ON machines.id = machines_exercises.machine_id
+        LEFT JOIN exercises
+        ON exercises.id = machines_exercises.exercise_id;
+    """
+    machines_data = db.session.execute(sql)
+
+    # create a dictionary to hold our data and so we can access it in the template
+    machine_exercise_dictionary = {}
+
+    # loop over our data to add the exercises as keys and create empty lists to hold the corresponding muscles
+    for machine in machines_data:
+        if not machine.machine_name in machine_exercise_dictionary:
+            machine_exercise_dictionary[machine.machine_name] = []
+
+        # create a conditional for when there are corresponding muscles to be 
+        #  added to the list we previously created and append them        
+        if machine.exercise_name:
+            entry = machine_exercise_dictionary[machine.machine_name]
+            entry.append(machine.exercise_name)
      
 
     return render_template (
         "homepage.html",
+        muscles=muscles,
+        muscle_from_form=muscle_from_form,
+        selected_muscle_db=selected_muscle_db,
+        specific_exercises=specific_exercises,
         form_package=form_package,
         url_arguments=url_arguments,
-        muscle_dictionary=muscle_dictionary,
-        gym_machines=gym_machines,
         specific_machines=specific_machines,
-        muscle_from_form=muscle_from_form,
         THIS_MACHINE=app.config["THIS_MACHINE"])
 
 
