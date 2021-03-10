@@ -12,7 +12,6 @@
     </p>
 </div>
 
-
 <div class="container">
     <div class="card">
         <img src="/static/images/muscles_abs.png" class="card-img-top">
@@ -20,9 +19,9 @@
     <form method="post" class="form-inline">
         <label class="my-1 mr-2" for="inlineFormCustomSelectPref">Choose a Muscle</label>
         <select name="muscle" id="muscle">
-            {% for muscle in muscle_dictionary %}
-            {% set selected = "selected" if muscle == muscle_from_form %}
-            <option value="{{ muscle }}" {{ selected }}>{{ muscle|title }}</option>
+            {% for muscle in muscles %}
+                {% set selected = "selected" if muscle.name == muscle_from_form %}
+                <option value="{{ muscle.id }}" {{ selected }}>{{ muscle.name|title }}</option>
             {% endfor %}
         </select>
         <button type="submit" class="btn btn-outline-dark m-2">Submit</button>
@@ -32,16 +31,16 @@
     {% if muscle_from_form %}
         <div class="card mx-auto w-50">
             <div class="card-header bg-secondary text-light">
-                <h5 class="card-title">{{ muscle_from_form|title }}</h5>
+                <h5 class="card-title">{{ selected_muscle_db.name|title }}</h5>
             </div>
 
             <div class="row no-gutters">
                 <div class="col-lg-6">
-                    <img src="static/images/{{ muscle_dictionary[muscle_from_form]['image'] }}" class="card-img">
+                    <img src="static/images/{{ selected_muscle_db.image }}" class="card-img">
                 </div>
                 <div class="col-lg-6">
                     <div class="card-body">
-                        <p class="card-text">{{ muscle_dictionary[muscle_from_form]['description'] }}</p>
+                        <p class="card-text">{{ selected_muscle_db.description }}</p>
                     </div>
                 </div>
             </div>
@@ -49,28 +48,26 @@
         <br>
 
         <div class="row">
-            <h1 class="text-centre display-4">You can use these machines to train {{ muscle_from_form }}</h1>
+            <h1 class="text-centre display-4">You can use these machines to train {{ selected_muscle_db.name|title }}</h1>
 
             <div class="card-deck">
-                {% for gym_machine in specific_machines %}
+                {% for machine in specific_machines %}
                     <div class="col-lg-6 mb-4">
                         <div class="card m-0 h-100">
                             <div class="card-header bg-secondary text-light">
-                                <h5 class="card-title">{{ gym_machine['name']|title }}</h5>
+                                <h5 class="card-title">{{ machine.name|title }}</h5>
                             </div>
                             <div class="card-body no-gutters d-flex flex-wrap">
                                 <div class="col-md-6">
-                                    <img src="static/images/{{ gym_machine.get('image_file_name')[0] }}" class="card-img-top h-100">
+                                    <img src="static/images/{{ machine.image }}" class="card-img-top h-100">
                                 </div>
                                 <div class="col-md-6">
-                                    <h5 class="card-title">You can use {{ gym_machine.get('name') }} to train {{ muscle_from_form }} by doing:</h5>
+                                    <h5 class="card-title">You can use {{ machine.name }} to train {{ muscle_from_form }} by doing:</h5>
                                     <ul class="list-group-flush">
-                                        {% for exercise, muscles in gym_machine["exercises"].items() %}
-                                            {% if muscle_from_form in muscles %}
+                                        {% for exercise in specific_exercises %}
                                             <li class="list-group-item p-0 m-0">
-                                                {{ exercise|replace("_", " ")|title }}
+                                                {{ exercise.name|title }}
                                             </li>
-                                            {% endif %}
                                         {% endfor %}
                                     </ul>
                                     <br>
