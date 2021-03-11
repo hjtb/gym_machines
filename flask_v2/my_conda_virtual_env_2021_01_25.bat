@@ -30,6 +30,7 @@ alembic=1.4.2 ^
 Flask-WTF=0.14.3 ^
 WTForms=2.2.1 ^
 requests=2.23.0 ^
+pyserial=3.5 ^
 
 rem Occasionally, this process has failed with a file contention error 
 rem To try and fix that, I am putting a sleep statement in between the steps
@@ -38,7 +39,8 @@ call timeout /t 10 /nobreak
 rem The following packages are only in the conda-forge channel
 call conda install  --name my_conda_virtual_env -c conda-forge ^
 Flask-Migrate=2.4.0 ^
-python-dotenv=0.13.0
+python-dotenv=0.13.0 ^
+opencv=4.5.0 ^
 
 rem Occasionally, this process has failed with a file contention error 
 rem To try and fix that, I am putting a sleep statement in between the steps
@@ -49,4 +51,5 @@ rem So first activate the environment and then pip install them all in
 call activate my_conda_virtual_env
 pip install mysql-connector-python==8.0.19
 pip install black==20.8b1
-
+pip install Flask-Session==0.3.2
+pip install waitress==1.4.4
