@@ -112,14 +112,6 @@ def homepage():
     sql = "SELECT * FROM muscles"
     muscles = db.session.execute(sql)
 
-    # Use sqlalchemy to query the muscles table 
-    sql = "SELECT * FROM exercises_muscles"
-    exercises_muscles = db.session.execute(sql)
-
-    # Use sqlalchemy to query the machines table 
-    sql = "SELECT * FROM machines_exercises"
-    machines_exercises = db.session.execute(sql)
-
     specific_machines_exercises = {}
     specific_exercises = []
     muscle_from_form = ""
@@ -163,12 +155,10 @@ def homepage():
                 specific_exercises.append(exercise)
                 for exercise in specific_exercises:
                     for machine, exercises in machine_exercise_dictionary.items():
-                        if exercise not in exercises:
-                            specific_machines_exercises[machine] = []
-                        if exercise:
-                            entry2 = specific_machines_exercises[machine]
-                            entry2.append(exercise)
-
+                        if exercise in exercises:
+                            machine_exercises_list = []
+                            specific_machines_exercises[machine] = machine_exercises_list.append(exercise)
+ 
 
     return render_template (
         "homepage.html",
