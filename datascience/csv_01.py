@@ -6,17 +6,28 @@ path_to_data = os.path.join(base_directory,"output_no_git","flipkart_com-ecommer
 with open(path_to_data, "r", encoding="utf-8") as file:
     lines = file.readlines()
 path_to_new_data = os.path.join(base_directory,"output_no_git","test.csv")
-number_required = 10
+number_required = 100
 number_processed = 0
-with open(path_to_new_data, "a") as file:
-    for line in lines:
+with open(path_to_new_data, "w") as file:
+    pass
+for line_index,line in enumerate(lines):
+    try:
         try:
-            line = line.replace(",false,",",0,")
-            line = line.replace(",true,",",1,")
-            file.write(f"{line}")
-            number_processed = number_processed + 1
-            if number_processed > number_required:
-                break
+            if line_index > 0:
+                test = int(line[0])
         except:
-            pass
+            continue
+        #print(line[-len('}]}"')-1:])
+        if not line[-len('}]}"')-1:-1] == '}]}"':
+            print(line[-len('}]}"')-1:-1])
+            continue
+        line = line.replace(",false,",",0,")
+        line = line.replace(",true,",",1,")
+        with open(path_to_new_data, "a") as file:
+            file.write(f"{line.replace('/n','')}")
+        number_processed = number_processed + 1
+        if number_processed >= number_required:
+            break
+    except:
+        pass
 1/0

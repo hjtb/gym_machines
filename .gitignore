@@ -1,5 +1,6 @@
 #exclude vs code files
 .vscode
+output_no_git
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
